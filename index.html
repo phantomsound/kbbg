@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KBBG FM 88.1 — Home</title>
+  <meta name="description" content="KBBG FM 88.1 — Community radio. Listen live." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="index.html">KBBG 88.1</a>
+  <nav class="nav">
+    <a href="index.html" aria-current="page">Home</a>
+    <a class="btn btn-gold" href="listen.html">Listen Live</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Voices of the Community</h1>
+      <p>Tune in to KBBG FM 88.1 — music, news, and culture.</p>
+      <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
+    </div>
+  </section>
+
+  <section class="cards">
+    <h2 class="section-title">Latest Highlights</h2>
+    <div class="grid">
+      <article class="card">
+        <img src="https://picsum.photos/640/360?1" alt="Show highlight">
+        <div class="card-body">
+          <h3>Morning Mix</h3>
+          <p>Fresh tracks and local voices to start your day.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://picsum.photos/640/360?2" alt="Community story">
+        <div class="card-body">
+          <h3>Community Spotlight</h3>
+          <p>Stories from neighbors shaping our city.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://picsum.photos/640/360?3" alt="Event">
+        <div class="card-body">
+          <h3>Events & Fundraisers</h3>
+          <p>Join us live and support community radio.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a> · 
+    <a href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88" target="_blank" rel="noopener">Android App</a>
+  </p>
+</footer>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
