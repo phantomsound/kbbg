@@ -9,7 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="styles.css?v=6" />
 </head>
 <body>
 <header class="site-header">
@@ -30,7 +30,7 @@
     </div>
   </section>
 
-  <!-- Embedded player (center) -->
+  <!-- Embedded player -->
   <section class="onair" aria-label="KBBG 88.1 Live Player">
     <div class="onair-box">
       <h2 class="section-title">On Air</h2>
@@ -39,6 +39,7 @@
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
         Your browser does not support the audio element.
       </audio>
+      <div id="np-home" class="now-playing" aria-live="polite"></div>
       <div class="player-actions">
         <button class="btn btn-gold" onclick="homeP().play()">Play</button>
         <button class="btn" onclick="homeP().pause()">Pause</button>
@@ -47,7 +48,7 @@
     </div>
   </section>
 
-  <!-- Featured (uses your square PNG; auto-crops nicely) -->
+  <!-- Featured -->
   <section class="featured">
     <article class="featured-card">
       <img src="assets/KBBGFM88One 400x400.png" alt="KBBG studio" />
@@ -63,7 +64,7 @@
     </article>
   </section>
 
-  <!-- Latest (no dates; simple cards) -->
+  <!-- Latest -->
   <section class="latest">
     <h2 class="section-title">Latest</h2>
     <div class="latest-list">
@@ -103,8 +104,29 @@
 </footer>
 
 <script>
-  const homeP = ()=>document.getElementById('homePlayer');
+  const homeP = () => document.getElementById('homePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
+
+  async function fetchNowPlaying(elId){
+    try{
+      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      const t = data?.data;
+      const title = t?.title || '';
+      const artist = t?.artist || '';
+      const art = t?.artwork || '';
+      const el = document.getElementById(elId);
+      if(!el) return;
+      if(title || artist){
+        el.innerHTML = (art ? `<img src="${art}" alt="" />` : '') + `${artist ? artist+' — ' : ''}${title}`;
+      } else {
+        el.textContent = '';
+      }
+    }catch(e){}
+  }
+  fetchNowPlaying('np-home');
+  setInterval(()=>fetchNowPlaying('np-home'), 20000);
 </script>
 </body>
 </html>
