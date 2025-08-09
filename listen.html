@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Live streaming from one of the nation’s oldest Black-owned public radio stations." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=8" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=9" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 <body>
 <header class="site-header">
@@ -21,20 +21,36 @@
 </header>
 
 <main>
-  <!-- Listen Live Player -->
-  <section class="listen-live">
-    <h1>Listen Live</h1>
-    <audio id="mainPlayer" controls autoplay>
-      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
-      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+  <!-- Keep the same visual language as home -->
+  <section class="listen-hero hero">
+    <div class="hero-inner">
+      <h1>Listen Live</h1>
+      <p>Press play. If playback doesn’t start, tap the Play button below.</p>
+    </div>
+  </section>
+
+  <section class="player-wrap" aria-label="KBBG 88.1 Live Stream">
+    <audio id="pagePlayer" controls preload="none">
+      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
+      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
       Your browser does not support the audio element.
     </audio>
-    <div id="np-listen" class="now-playing" aria-live="polite"></div>
+    <div id="np-page" class="now-playing" aria-live="polite"></div>
     <div class="player-actions">
-      <button class="btn btn-gold" onclick="mainP().play()">Play</button>
-      <button class="btn" onclick="mainP().pause()">Pause</button>
+      <button class="btn btn-gold" onclick="pp().play()">Play</button>
+      <button class="btn" onclick="pp().pause()">Pause</button>
     </div>
-    <p class="note">Tip: Tap Play if the stream doesn't start automatically.</p>
+    <p class="note">Autoplay is blocked by browsers—tap Play to start.</p>
+  </section>
+
+  <section class="app-cta">
+    <h2 class="section-title">Prefer the app?</h2>
+    <div class="store-row">
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
+    </div>
   </section>
 </main>
 
@@ -43,9 +59,10 @@
 </footer>
 
 <script>
-  const mainP = () => document.getElementById('mainPlayer');
+  const pp = () => document.getElementById('pagePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
+  // Now Playing (reuse)
   async function fetchNowPlaying(elId){
     try{
       const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -64,8 +81,8 @@
       }
     }catch(e){}
   }
-  fetchNowPlaying('np-listen');
-  setInterval(()=>fetchNowPlaying('np-listen'), 20000);
+  fetchNowPlaying('np-page');
+  setInterval(()=>fetchNowPlaying('np-page'), 20000);
 </script>
 </body>
 </html>

@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=8" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=9" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 <body>
 <header class="site-header">
@@ -35,8 +35,8 @@
     <div class="onair-box">
       <h2 class="section-title">On Air</h2>
       <audio id="homePlayer" controls preload="none">
-        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
-        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
+        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
         Your browser does not support the audio element.
       </audio>
       <div id="np-home" class="now-playing" aria-live="polite"></div>
@@ -48,13 +48,12 @@
     </div>
   </section>
 
-  <!-- Featured -->
+  <!-- Featured (with fallback) -->
   <section class="featured">
     <article class="featured-card">
-      <img id="featured-img"
-           src="assets/KBBGFM88One400x400.png?v=8"
-           data-fallback="assets/og-kbbg-1200x630.jpg?v=8"
-           alt="KBBG studio" loading="lazy" />
+      <img src="assets/KBBGFM88One400x400.png?v=9"
+           alt="KBBG studio"
+           onerror="this.onerror=null;this.src='assets/placeholder-400x400.png';" />
       <div class="featured-body">
         <div class="chips">
           <span class="chip">Music</span>
@@ -67,7 +66,7 @@
     </article>
   </section>
 
-  <!-- Latest -->
+  <!-- Latest (simple, no dates) -->
   <section class="latest">
     <h2 class="section-title">Latest</h2>
     <div class="latest-list">
@@ -110,7 +109,7 @@
   const homeP = () => document.getElementById('homePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // Now playing info
+  // Now Playing (shared function)
   async function fetchNowPlaying(elId){
     try{
       const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -131,18 +130,6 @@
   }
   fetchNowPlaying('np-home');
   setInterval(()=>fetchNowPlaying('np-home'), 20000);
-
-  // Featured image fallback
-  (function(){
-    const img = document.getElementById('featured-img');
-    if(!img) return;
-    img.addEventListener('error', () => {
-      const fb = img.getAttribute('data-fallback');
-      if (fb && !img.src.includes(fb)) {
-        img.src = fb;
-      }
-    });
-  })();
 </script>
 </body>
 </html>
