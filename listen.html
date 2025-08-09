@@ -9,9 +9,9 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="logo" href="index.html">KBBG 88.1</a>
+  <a class="logo" href="./">KBBG 88.1</a>
   <nav class="nav">
-    <a href="index.html">Home</a>
+    <a href="./">Home</a>
     <a class="btn btn-gold" href="listen.html" aria-current="page">Listen</a>
   </nav>
 </header>
@@ -26,7 +26,8 @@
     <!-- Replace STREAM_URL with the real HTTPS stream when you have it -->
     <audio id="player" controls preload="none">
       <source src="https://example.com/STREAM_URL.mp3" type="audio/mpeg">
-      <p>Your browser doesn’t support the audio element.</p>
+      <!-- If your stream is HLS (.m3u8), replace the line above and see the HLS note below. -->
+      Your browser does not support the audio element.
     </audio>
 
     <div class="player-actions">
@@ -35,7 +36,7 @@
     </div>
 
     <p class="note">
-      Tip: Some browsers block non-HTTPS streams on HTTPS sites. Make sure the station URL is HTTPS or use a secure proxy.
+      Tip: Browsers block non-HTTPS streams on HTTPS sites. Use an <strong>HTTPS</strong> stream or a secure proxy.
     </p>
   </section>
 
@@ -46,10 +47,27 @@
       Open KBBG FM 88.1 on Android
     </a>
   </section>
+
+  <!-- Optional HLS support (only if your stream is .m3u8)
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const audio = document.getElementById('player');
+    const hlsUrl = 'https://example.com/STREAM_URL.m3u8'; // replace if using HLS
+    if (hlsUrl.endsWith('.m3u8')) {
+      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = hlsUrl;
+      } else if (window.Hls && Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(hlsUrl);
+        hls.attachMedia(audio);
+      }
+    }
+  </script>
+  -->
 </main>
 
 <footer class="site-footer">
-  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="index.html">Home</a></p>
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="./">Home</a></p>
 </footer>
 <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>

@@ -4,51 +4,72 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KBBG FM 88.1 — Home</title>
-  <meta name="description" content="KBBG FM 88.1 — Community radio. Listen live." />
+  <meta name="description" content="KBBG FM 88.1 — Community radio. Listen live, explore shows, and discover local stories." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <header class="site-header">
-  <a class="logo" href="index.html">KBBG 88.1</a>
+  <a class="logo" href="./">KBBG 88.1</a>
   <nav class="nav">
-    <a href="index.html" aria-current="page">Home</a>
+    <a href="./" aria-current="page">Home</a>
     <a class="btn btn-gold" href="listen.html">Listen Live</a>
   </nav>
 </header>
 
 <main>
+  <!-- Hero -->
   <section class="hero">
     <div class="hero-inner">
       <h1>Voices of the Community</h1>
-      <p>Tune in to KBBG FM 88.1 — music, news, and culture.</p>
+      <p>Tune in to KBBG FM 88.1 — music, news, and culture across our city.</p>
       <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
     </div>
   </section>
 
-  <section class="cards">
-    <h2 class="section-title">Latest Highlights</h2>
-    <div class="grid">
-      <article class="card">
-        <img src="https://picsum.photos/640/360?1" alt="Show highlight">
-        <div class="card-body">
-          <h3>Morning Mix</h3>
-          <p>Fresh tracks and local voices to start your day.</p>
+  <!-- Featured story (Vocalo-style overlay) -->
+  <section class="featured">
+    <article class="featured-card">
+      <img src="https://picsum.photos/1200/630?blur=1" alt="Featured story image">
+      <div class="featured-body">
+        <div class="chips">
+          <span class="chip">Music</span>
+          <span class="chip">Local</span>
         </div>
-      </article>
-      <article class="card">
-        <img src="https://picsum.photos/640/360?2" alt="Community story">
-        <div class="card-body">
-          <h3>Community Spotlight</h3>
-          <p>Stories from neighbors shaping our city.</p>
+        <h2>Featured: Voices that Move the City</h2>
+        <p>New interviews, mixes, and community stories from KBBG FM 88.1.</p>
+        <a class="btn btn-gold" href="listen.html">Listen Live</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Latest list with category chips -->
+  <section class="latest">
+    <h2 class="section-title">Latest</h2>
+    <div class="latest-list">
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/240/160?1" alt="Morning Mix: Artist Spotlight">
+        <div class="latest-meta">
+          <div class="chips"><span class="chip">Interview</span></div>
+          <h3>Morning Mix: Artist Spotlight</h3>
+          <time datetime="2025-08-09">Aug 9, 2025</time>
         </div>
-      </article>
-      <article class="card">
-        <img src="https://picsum.photos/640/360?3" alt="Event">
-        <div class="card-body">
-          <h3>Events & Fundraisers</h3>
-          <p>Join us live and support community radio.</p>
+      </a>
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/240/160?2" alt="Community Spotlight: North Side Stories">
+        <div class="latest-meta">
+          <div class="chips"><span class="chip">Culture</span></div>
+          <h3>Community Spotlight: North Side Stories</h3>
+          <time datetime="2025-08-08">Aug 8, 2025</time>
         </div>
-      </article>
+      </a>
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/240/160?3" alt="Live Fundraiser This Weekend">
+        <div class="latest-meta">
+          <div class="chips"><span class="chip">Events</span></div>
+          <h3>Live Fundraiser This Weekend</h3>
+          <time datetime="2025-08-07">Aug 7, 2025</time>
+        </div>
+      </a>
     </div>
   </section>
 </main>
