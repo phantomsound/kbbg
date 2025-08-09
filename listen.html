@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,7 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Listen Live — KBBG FM 88.1</title>
   <meta name="description" content="Listen live to KBBG FM 88.1." />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" content="#4B0082" />
+  <link rel="stylesheet" href="styles.css?v=4" />
 </head>
 <body>
 <header class="site-header">
@@ -20,132 +20,40 @@
 <main>
   <section class="listen-hero">
     <h1>KBBG FM 88.1 — Listen Live</h1>
-    <p>Press play. If playback fails, try the app below.</p>
+    <p>Press play. If playback fails, try the mobile app links below.</p>
   </section>
 
   <section class="player-wrap" aria-label="KBBG 88.1 Live Stream">
-    <!-- Replace STREAM_URL with the real HTTPS stream when you have it -->
-    <audio id="player" controls preload="none">
-      <source src="https://example.com/STREAM_URL.mp3" type="audio/mpeg">
-      <!-- If your stream is HLS (.m3u8), replace the line above and see the HLS note below. -->
+    <audio id="pagePlayer" controls preload="none">
+      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
       Your browser does not support the audio element.
     </audio>
-
     <div class="player-actions">
-      <a class="btn btn-gold" href="#" onclick="document.getElementById('player').play();return false;">Play</a>
-      <a class="btn" href="#" onclick="document.getElementById('player').pause();return false;">Pause</a>
+      <button class="btn btn-gold" onclick="pp().play()">Play</button>
+      <button class="btn" onclick="pp().pause()">Pause</button>
     </div>
-
-    <p class="note">
-      Tip: Browsers block non-HTTPS streams on HTTPS sites. Use an <strong>HTTPS</strong> stream or a secure proxy.
-    </p>
+    <p class="note">Autoplay is blocked by browsers—tap Play to start.</p>
   </section>
 
   <section class="app-cta">
     <h2>Prefer the app?</h2>
-    <a class="btn btn-gold btn-lg" target="_blank" rel="noopener"
-       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">
-      Open KBBG FM 88.1 on Android
-    </a>
+    <div class="store-row">
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Get it on Google Play</a>
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">Download on the App Store</a>
+    </div>
   </section>
-
-  <!-- Optional HLS support (only if your stream is .m3u8)
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script>
-    const audio = document.getElementById('player');
-    const hlsUrl = 'https://example.com/STREAM_URL.m3u8'; // replace if using HLS
-    if (hlsUrl.endsWith('.m3u8')) {
-      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-        audio.src = hlsUrl;
-      } else if (window.Hls && Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(hlsUrl);
-        hls.attachMedia(audio);
-      }
-    }
-  </script>
-  -->
 </main>
 
 <footer class="site-footer">
   <p>© <span id="y"></span> KBBG FM 88.1 · <a href="./">Home</a></p>
 </footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+
+<script>
+  const pp = ()=>document.getElementById('pagePlayer');
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
-=======
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Listen Live — KBBG FM 88.1</title>
-  <meta name="description" content="Listen live to KBBG FM 88.1." />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-<header class="site-header">
-  <a class="logo" href="./">KBBG 88.1</a>
-  <nav class="nav">
-    <a href="./">Home</a>
-    <a class="btn btn-gold" href="listen.html" aria-current="page">Listen</a>
-  </nav>
-</header>
-
-<main>
-  <section class="listen-hero">
-    <h1>KBBG FM 88.1 — Listen Live</h1>
-    <p>Press play. If playback fails, try the app below.</p>
-  </section>
-
-  <section class="player-wrap" aria-label="KBBG 88.1 Live Stream">
-    <!-- Replace STREAM_URL with the real HTTPS stream when you have it -->
-    <audio id="player" controls preload="none">
-      <source src="https://example.com/STREAM_URL.mp3" type="audio/mpeg">
-      <!-- If your stream is HLS (.m3u8), replace the line above and see the HLS note below. okay-->
-      Your browser does not support the audio element.
-    </audio>
-
-    <div class="player-actions">
-      <a class="btn btn-gold" href="#" onclick="document.getElementById('player').play();return false;">Play</a>
-      <a class="btn" href="#" onclick="document.getElementById('player').pause();return false;">Pause</a>
-    </div>
-
-    <p class="note">
-      Tip: Browsers block non-HTTPS streams on HTTPS sites. Use an <strong>HTTPS</strong> stream or a secure proxy.
-    </p>
-  </section>
-
-  <section class="app-cta">
-    <h2>Prefer the app?</h2>
-    <a class="btn btn-gold btn-lg" target="_blank" rel="noopener"
-       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">
-      Open KBBG FM 88.1 on Android
-    </a>
-  </section>
-
-  <!-- Optional HLS support (only if your stream is .m3u8)
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script>
-    const audio = document.getElementById('player');
-    const hlsUrl = 'https://example.com/STREAM_URL.m3u8'; // replace if using HLS
-    if (hlsUrl.endsWith('.m3u8')) {
-      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-        audio.src = hlsUrl;
-      } else if (window.Hls && Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(hlsUrl);
-        hls.attachMedia(audio);
-      }
-    }
-  </script>
-  -->
-</main>
-
-<footer class="site-footer">
-  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="./">Home</a></p>
-</footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
-</body>
-</html>
->>>>>>> 90816e8 (Auto update Sat-08-09_ 1h41m)

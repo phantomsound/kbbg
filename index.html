@@ -9,7 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=4" />
 </head>
 <body>
 <header class="site-header">
@@ -26,34 +26,31 @@
     <div class="hero-inner">
       <h1>Stream KBBG FM 88.1</h1>
       <p>Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet.</p>
-      <div class="hero-actions">
-        <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
-        <a class="btn btn-outline btn-lg" id="getAppBtn" href="#">Get the App</a>
-      </div>
+      <a class="btn btn-gold btn-lg" href="listen.html">Open Player Page</a>
     </div>
   </section>
 
-  <!-- On Air: embedded player (center of homepage) -->
+  <!-- Embedded player (tight + centered) -->
   <section class="onair" aria-label="KBBG 88.1 Live Player">
-    <h2 class="section-title">On Air</h2>
     <div class="onair-box">
+      <h2 class="section-title">On Air</h2>
       <audio id="homePlayer" controls preload="none">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
         Your browser does not support the audio element.
       </audio>
       <div class="player-actions">
-        <button class="btn btn-gold" onclick="p().play()">Play</button>
-        <button class="btn" onclick="p().pause()">Pause</button>
+        <button class="btn btn-gold" onclick="homeP().play()">Play</button>
+        <button class="btn" onclick="homeP().pause()">Pause</button>
       </div>
       <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
     </div>
   </section>
 
-  <!-- Featured (Vocalo-style overlay) -->
+  <!-- Featured (single card, no duplicate copy) -->
   <section class="featured">
     <article class="featured-card">
-      <img src="assets/og-kbbg-1200x630.jpg" alt="KBBG FM 88.1 studio">
+      <img src="assets/og-kbbg-1200x630.jpg" alt="KBBG studio">
       <div class="featured-body">
         <div class="chips">
           <span class="chip">Music</span>
@@ -66,26 +63,26 @@
     </article>
   </section>
 
-  <!-- Latest (simple cards, no dates) -->
+  <!-- Latest (no dates; simple cards) -->
   <section class="latest">
     <h2 class="section-title">Latest</h2>
     <div class="latest-list">
-      <a class="latest-item" href="#" aria-label="Lee Crooks: Voice of CTA">
-        <img src="https://picsum.photos/240/160?random=21" alt="">
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/480/320?random=201" alt="">
         <div class="latest-meta">
           <div class="chips"><span class="chip">Interview</span></div>
           <h3>Lee Crooks: Voice of CTA</h3>
         </div>
       </a>
-      <a class="latest-item" href="#" aria-label="Community Spotlight">
-        <img src="https://picsum.photos/240/160?random=22" alt="">
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/480/320?random=202" alt="">
         <div class="latest-meta">
           <div class="chips"><span class="chip">Culture</span></div>
           <h3>Community Spotlight</h3>
         </div>
       </a>
-      <a class="latest-item" href="#" aria-label="Weekend Mix: Local DJs">
-        <img src="https://picsum.photos/240/160?random=23" alt="">
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/480/320?random=203" alt="">
         <div class="latest-meta">
           <div class="chips"><span class="chip">Music</span></div>
           <h3>Weekend Mix: Local DJs</h3>
@@ -100,25 +97,14 @@
   <div class="store-row">
     <a class="store-badge" target="_blank" rel="noopener"
        href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
-    <a class="store-badge" id="iosStoreFooter" target="_blank" rel="noopener"
+    <a class="store-badge" target="_blank" rel="noopener"
        href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
   </div>
 </footer>
 
 <script>
-  const p = ()=>document.getElementById('homePlayer');
-
-  // Footer year
+  const homeP = ()=>document.getElementById('homePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
-
-  // Smart "Get the App" link
-  (function(){
-    const ANDROID=/Android/i.test(navigator.userAgent);
-    const IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const links={
-      android:'https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88',
-      ios:'https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588'
-    };
-    const btn=document.getElementById('getAppBtn');
-    btn.href= ANDROID?links.android : IOS?links.ios : 'listen.html';
-    btn.setAttr
+</script>
+</body>
+</html>
