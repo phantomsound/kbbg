@@ -18,8 +18,6 @@ The site provides:
 
 \- \*\*Live audio streaming\*\* directly from the homepage and dedicated "Listen Live" page.
 
-\- \*\*Featured and latest stories\*\* inspired by Vocalo.org style.
-
 \- \*\*Links to mobile apps\*\* for both Google Play and Apple App Store.
 
 
@@ -37,6 +35,7 @@ To edit and preview the site locally:
 &nbsp;  git clone https://github.com/phantomsound/kbbg.git
 
 &nbsp;  cd kbbg
+
 
 
 
