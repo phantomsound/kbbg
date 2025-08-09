@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KBBG FM 88.1 — Home</title>
-  <meta name="description" content="KBBG FM 88.1 — Community radio. Listen live, explore shows, and discover local stories." />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet." />
+  <meta name="theme-color" content="#4B0082" />
+  <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
+  <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 </head>
 <body>
 <header class="site-header">
@@ -18,56 +22,73 @@
 
 <main>
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero hero-image">
     <div class="hero-inner">
-      <h1>Voices of the Community</h1>
-      <p>Tune in to KBBG FM 88.1 — music, news, and culture across our city.</p>
-      <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
+      <h1>Stream KBBG FM 88.1</h1>
+      <p>Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
+        <a class="btn btn-outline btn-lg" id="getAppBtn" href="#">Get the App</a>
+      </div>
     </div>
   </section>
 
-  <!-- Featured story (Vocalo-style overlay) -->
+  <!-- On Air: embedded player (center of homepage) -->
+  <section class="onair" aria-label="KBBG 88.1 Live Player">
+    <h2 class="section-title">On Air</h2>
+    <div class="onair-box">
+      <audio id="homePlayer" controls preload="none">
+        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="player-actions">
+        <button class="btn btn-gold" onclick="p().play()">Play</button>
+        <button class="btn" onclick="p().pause()">Pause</button>
+      </div>
+      <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
+    </div>
+  </section>
+
+  <!-- Featured (Vocalo-style overlay) -->
   <section class="featured">
     <article class="featured-card">
-      <img src="https://picsum.photos/1200/630?blur=1" alt="Featured story image">
+      <img src="assets/og-kbbg-1200x630.jpg" alt="KBBG FM 88.1 studio">
       <div class="featured-body">
         <div class="chips">
           <span class="chip">Music</span>
-          <span class="chip">Local</span>
+          <span class="chip">Community</span>
         </div>
-        <h2>Featured: Voices that Move the City</h2>
-        <p>New interviews, mixes, and community stories from KBBG FM 88.1.</p>
-        <a class="btn btn-gold" href="listen.html">Listen Live</a>
+        <h2>Live from Waterloo</h2>
+        <p>Local voices, culture, and talk shows—24/7 on KBBG.</p>
+        <a class="btn btn-gold" href="listen.html">Play the Stream</a>
       </div>
     </article>
   </section>
 
-  <!-- Latest list with category chips -->
+  <!-- Latest (simple cards, no dates) -->
   <section class="latest">
     <h2 class="section-title">Latest</h2>
     <div class="latest-list">
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/240/160?1" alt="Morning Mix: Artist Spotlight">
+      <a class="latest-item" href="#" aria-label="Lee Crooks: Voice of CTA">
+        <img src="https://picsum.photos/240/160?random=21" alt="">
         <div class="latest-meta">
           <div class="chips"><span class="chip">Interview</span></div>
-          <h3>Morning Mix: Artist Spotlight</h3>
-          <time datetime="2025-08-09">Aug 9, 2025</time>
+          <h3>Lee Crooks: Voice of CTA</h3>
         </div>
       </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/240/160?2" alt="Community Spotlight: North Side Stories">
+      <a class="latest-item" href="#" aria-label="Community Spotlight">
+        <img src="https://picsum.photos/240/160?random=22" alt="">
         <div class="latest-meta">
           <div class="chips"><span class="chip">Culture</span></div>
-          <h3>Community Spotlight: North Side Stories</h3>
-          <time datetime="2025-08-08">Aug 8, 2025</time>
+          <h3>Community Spotlight</h3>
         </div>
       </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/240/160?3" alt="Live Fundraiser This Weekend">
+      <a class="latest-item" href="#" aria-label="Weekend Mix: Local DJs">
+        <img src="https://picsum.photos/240/160?random=23" alt="">
         <div class="latest-meta">
-          <div class="chips"><span class="chip">Events</span></div>
-          <h3>Live Fundraiser This Weekend</h3>
-          <time datetime="2025-08-07">Aug 7, 2025</time>
+          <div class="chips"><span class="chip">Music</span></div>
+          <h3>Weekend Mix: Local DJs</h3>
         </div>
       </a>
     </div>
@@ -75,13 +96,29 @@
 </main>
 
 <footer class="site-footer">
-  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a> · 
-    <a href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88" target="_blank" rel="noopener">Android App</a>
-  </p>
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a></p>
+  <div class="store-row">
+    <a class="store-badge" target="_blank" rel="noopener"
+       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+    <a class="store-badge" id="iosStoreFooter" target="_blank" rel="noopener"
+       href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
+  </div>
 </footer>
 
 <script>
+  const p = ()=>document.getElementById('homePlayer');
+
+  // Footer year
   document.getElementById('y').textContent = new Date().getFullYear();
-</script>
-</body>
-</html>
+
+  // Smart "Get the App" link
+  (function(){
+    const ANDROID=/Android/i.test(navigator.userAgent);
+    const IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const links={
+      android:'https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88',
+      ios:'https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588'
+    };
+    const btn=document.getElementById('getAppBtn');
+    btn.href= ANDROID?links.android : IOS?links.ios : 'listen.html';
+    btn.setAttr
