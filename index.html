@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KBBG FM 88.1 — Home</title>
   <meta name="description" content="KBBG FM 88.1 — Community radio. Listen live, explore shows, and discover local stories." />
+  <meta name="theme-color" content="#4B0082" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -22,7 +23,10 @@
     <div class="hero-inner">
       <h1>Voices of the Community</h1>
       <p>Tune in to KBBG FM 88.1 — music, news, and culture across our city.</p>
-      <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
+      <div class="hero-actions">
+        <a class="btn btn-gold btn-lg" href="listen.html">Listen Live</a>
+        <a class="btn btn-outline btn-lg" id="getAppBtn" href="#">Get the App</a>
+      </div>
     </div>
   </section>
 
@@ -75,13 +79,51 @@
 </main>
 
 <footer class="site-footer">
-  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a> · 
-    <a href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88" target="_blank" rel="noopener">Android App</a>
-  </p>
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a></p>
+  <div class="store-row">
+    <a class="store-badge" target="_blank" rel="noopener"
+       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+    <a class="store-badge" id="iosStoreFooter" target="_blank" rel="noopener"
+       href="IOS_APP_STORE_URL">App Store</a>
+  </div>
 </footer>
 
 <script>
+  // Year
   document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Smart "Get the App" link (Android → Play, iOS → App Store, others → Listen page)
+  (function(){
+    const ANDROID = /Android/i.test(navigator.userAgent);
+    const IOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const links = {
+      android: 'https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88',
+      ios: 'IOS_APP_STORE_URL' // TODO: replace with your real App Store URL
+    };
+    const btn = document.getElementById('getAppBtn');
+    if (ANDROID) {
+      btn.href = links.android;
+      btn.setAttribute('target', '_blank');
+      btn.setAttribute('rel', 'noopener');
+    } else if (IOS) {
+      btn.href = links.ios;
+      btn.setAttribute('target', '_blank');
+      btn.setAttribute('rel', 'noopener');
+      // If iOS URL not set yet, fall back to Listen page
+      if (!links.ios || links.ios === 'IOS_APP_STORE_URL') btn.href = 'listen.html';
+    } else {
+      btn.href = 'listen.html';
+    }
+
+    // If the iOS URL is not set, dim the footer badge (still clickable if you keep it)
+    const iosFooter = document.getElementById('iosStoreFooter');
+    if (iosFooter && (!links.ios || links.ios === 'IOS_APP_STORE_URL')) {
+      iosFooter.classList.add('disabled');
+      iosFooter.title = 'iOS link coming soon';
+      iosFooter.href = '#';
+      iosFooter.addEventListener('click', function(e){ e.preventDefault(); });
+    }
+  })();
 </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Listen Live — KBBG FM 88.1</title>
   <meta name="description" content="Listen live to KBBG FM 88.1." />
+  <meta name="theme-color" content="#4B0082" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -23,10 +24,11 @@
   </section>
 
   <section class="player-wrap" aria-label="KBBG 88.1 Live Stream">
-    <!-- Replace STREAM_URL with the real HTTPS stream when you have it -->
+    <!-- Real Radio.co stream -->
     <audio id="player" controls preload="none">
-      <source src="https://example.com/STREAM_URL.mp3" type="audio/mpeg">
-      <!-- If your stream is HLS (.m3u8), replace the line above and see the HLS note below. -->
+      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+      <!-- Optional HLS secondary source -->
+      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
       Your browser does not support the audio element.
     </audio>
 
@@ -36,32 +38,39 @@
     </div>
 
     <p class="note">
-      Tip: Browsers block non-HTTPS streams on HTTPS sites. Use an <strong>HTTPS</strong> stream or a secure proxy.
+      Tip: Autoplay is blocked by browsers—tap Play to start. If playback stalls, try the app links below.
     </p>
   </section>
 
   <section class="app-cta">
     <h2>Prefer the app?</h2>
-    <a class="btn btn-gold btn-lg" target="_blank" rel="noopener"
-       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">
-      Open KBBG FM 88.1 on Android
-    </a>
+    <div class="store-row">
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Get it on Google Play</a>
+      <a class="store-badge" id="iosStoreListen" target="_blank" rel="noopener"
+         href="IOS_APP_STORE_URL">Download on the App Store</a>
+    </div>
+    <div class="dual-cta">
+      <a class="btn btn-gold btn-lg" id="smartAppBtn" href="#">Open the App</a>
+    </div>
   </section>
 
-  <!-- Optional HLS support (only if your stream is .m3u8)
+  <!-- If you find HLS is required on desktop Chrome, you can enable hls.js below.
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
-    const audio = document.getElementById('player');
-    const hlsUrl = 'https://example.com/STREAM_URL.m3u8'; // replace if using HLS
-    if (hlsUrl.endsWith('.m3u8')) {
-      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-        audio.src = hlsUrl;
-      } else if (window.Hls && Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(hlsUrl);
-        hls.attachMedia(audio);
+    (function(){
+      const audio = document.getElementById('player');
+      const hlsUrl = 'https://s5.radio.co/se50df870e/listen.m3u8';
+      if (hlsUrl.endsWith('.m3u8')) {
+        if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+          audio.src = hlsUrl;
+        } else if (window.Hls && Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(hlsUrl);
+          hls.attachMedia(audio);
+        }
       }
-    }
+    })();
   </script>
   -->
 </main>
@@ -69,6 +78,42 @@
 <footer class="site-footer">
   <p>© <span id="y"></span> KBBG FM 88.1 · <a href="./">Home</a></p>
 </footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Smart "Open the App" button — routes users to the right store
+  (function(){
+    const ANDROID = /Android/i.test(navigator.userAgent);
+    const IOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const links = {
+      android: 'https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88',
+      ios: 'IOS_APP_STORE_URL' // TODO: replace with your real App Store URL
+    };
+    const smart = document.getElementById('smartAppBtn');
+
+    if (ANDROID) {
+      smart.href = links.android;
+      smart.setAttribute('target','_blank'); smart.setAttribute('rel','noopener');
+    } else if (IOS) {
+      smart.href = links.ios;
+      smart.setAttribute('target','_blank'); smart.setAttribute('rel','noopener');
+      if (!links.ios || links.ios === 'IOS_APP_STORE_URL') {
+        smart.textContent = 'App Store link coming soon';
+        smart.classList.add('btn-disabled');
+        smart.href = '#';
+        smart.addEventListener('click', e => e.preventDefault());
+        const iosBadge = document.getElementById('iosStoreListen');
+        if (iosBadge) {
+          iosBadge.classList.add('disabled');
+          iosBadge.title = 'iOS link coming soon';
+          iosBadge.href = '#';
+        }
+      }
+    } else {
+      smart.href = 'https://phantomsound.github.io/kbbg/listen.html';
+    }
+  })();
+</script>
 </body>
 </html>
