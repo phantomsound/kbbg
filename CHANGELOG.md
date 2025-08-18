@@ -37,4 +37,23 @@ All notable changes to this project are documented here.
 - Home: removed community/latest grid, retained Featured and collapsible Last 5 Songs.
 - Listen: matched Home’s modern visual style (gradient, card, now playing).
 
-(Older entries retained below.)
+
+---
+
+# `CHANGELOG.md`
+```markdown
+# Changelog
+
+## 2025-08-17
+- Unify **modern player style** across `index.html` and `listen.html` (purple→black gradient, gold accents).
+- **Remove Featured** block from homepage for simpler layout.
+- Add **collapsible “Last 5 Songs”** to homepage (ads excluded, loads immediately and auto-refreshes).
+- Make `listen.html` **player-only** (no recent tracks), matching homepage player look.
+- Polish CSS (native `<details>` accordion styling, improved spacing/contrast).
+
+## 2025-08-09
+- Added Open Graph image, cleaned hero copy, added store badges.
+- Embedded player on homepage, added “Listen Live” page.
+
+## 2025-08-07
+- Initial structure (index / listen / styles), GitHub Pages setup.

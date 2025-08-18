@@ -1,14 +1,34 @@
-# KBBG FM 88.1 — Community Radio Website
+# KBBG 88.1 — Static Site
 
-A modern website for **KBBG FM 88.1**, one of the nation’s oldest Black-owned public radio stations in Waterloo, Iowa.
+Simple, fast site for KBBG FM 88.1 hosted on GitHub Pages.
 
-## Features
+## Pages
+- **Home (`index.html`)**
+  - Unified modern player (play/pause, “Now Playing”, artwork).
+  - **“Last 5 Songs”** collapsible section (ads excluded). Loads on page open and refreshes periodically.
+  - Store badges (Google Play / App Store).
 
-- **Live Stream** with a modern, unified player design on Home and Listen pages.
-- **Now Playing** (art + artist — title) from Radio.co public API.
-- **Last 5 Songs** on Home (collapsible), excludes ads but marks **AD BREAK** when relevant.
-- **Mobile-friendly** design; purple → black gradient theme with gold accents.
-- **Store Links:** Google Play + App Store.
+- **Listen (`listen.html`)**
+  - **Player-only** page using the same unified style as the homepage player.
+  - Store badges displayed beneath the player.
 
-## Structure
+## Streaming
+- Primary: `https://s5.radio.co/se50df870e/listen`
+- HLS fallback: `https://s5.radio.co/se50df870e/listen.m3u8`
 
+## Now Playing & Recent
+- Current track: `https://public.radio.co/api/v2/se50df870e/track/current`
+- Recent history (for last 5 songs): `https://public.radio.co/api/v2/se50df870e/history`  
+  - Ads are filtered out (by common keywords like “ad”, “advert”, “promo”, “sweeper”, “station id”, “psa”).
+
+## Assets
+- Social preview image: `assets/og-kbbg-1200x630.jpg`
+- Default artwork fallback: `assets/KBBGFM88One400x400.png`
+
+## Local Dev
+Open `index.html` in a browser, or use a tiny static server:
+
+```bash
+# Python 3
+python -m http.server 8080
+# then open http://localhost:8080
