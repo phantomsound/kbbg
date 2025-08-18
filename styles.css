@@ -93,8 +93,8 @@ body{
 }
 .now-playing .np-text{font-weight:600}
 
-/* ---------- Featured / Latest (home) ---------- */
-.featured, .latest{padding:2rem 1rem}
+/* ---------- Featured ---------- */
+.featured{padding:2rem 1rem}
 .featured-card{
   display:grid; grid-template-columns:120px 1fr; gap:1rem; align-items:center;
   max-width:900px; margin:0 auto; padding:1rem;
@@ -108,21 +108,6 @@ body{
 }
 .featured-body h2{margin:.25rem 0 .25rem}
 .featured-body p{margin:0 0 .75rem; color:var(--muted)}
-
-.latest .section-title{max-width:900px; margin:0 auto 1rem}
-.latest-list{
-  display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-  max-width:900px; margin:0 auto;
-}
-.latest-item{
-  display:block; text-decoration:none; color:#fff;
-  background:var(--card); border:1px solid var(--card-brd); border-radius:14px; overflow:hidden;
-  transition:transform .1s ease, border-color .2s ease;
-}
-.latest-item:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.22)}
-.latest-item img{width:100%; aspect-ratio:3/2; object-fit:cover}
-.latest-meta{padding:.75rem}
-.latest-meta .chips{margin-bottom:.25rem}
 
 /* ---------- Footer ---------- */
 .site-footer{
@@ -138,16 +123,8 @@ body{
 }
 .store-badge:hover{background:rgba(255,255,255,.12)}
 
-/* ---------- Utilities ---------- */
-.section-divider{height:1px; background:rgba(255,255,255,.08); margin:1rem 0}
-
 /* ---------- Responsive Tweaks ---------- */
 @media (max-width:680px){
   .featured-card{grid-template-columns:1fr}
   .featured-card img{width:100%; height:220px}
 }
-
-/* ---------- Home-only notes (kept for parity) ---------- */
-.hero .btn-lg{margin-top:.25rem}
-
-/* Keep consistency when this stylesheet is used by both pages */

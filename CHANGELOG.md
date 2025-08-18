@@ -5,22 +5,22 @@ All notable changes to this project are documented here.
 ---
 
 ### 2025-08-17
-- **Listen Page Modernization**
-  - Updated player design to match the home page for consistent UX (modern card, gold buttons).
-  - Removed outdated elements; page is now a centered, gradient-backed player only.
-  - Unified **Now Playing** display with artwork + artist + title.
-- **CSS Enhancements**
-  - Consolidated reusable player styles (`.onair-box`, `.now-playing`, `.btn-gold`).
-  - Applied purple → black gradients sitewide for consistency.
+- **Home**
+  - Removed “community/latest” items section per request.
+  - Kept Featured card; retained unified player with collapsible “Last 5 Songs”.
+- **Listen**
+  - Updated header to match Home (logo + nav).
+  - Applied the same modern player card (gradient, gold buttons, Now Playing layout).
+- **Styles**
+  - Minor tweaks to ensure Listen page picks up the unified styling.
 - **Docs**
-  - Updated README to reflect unified player design and simplified Listen page.
+  - Updated README to reflect removals and unified player design.
 
 ### 2025-08-16
-- Added dedicated **Listen Live** page; improved hero + OG tags.
-- Fixed stray/awkward link on Home.
+- Fixed stray/awkward link on Home and improved hero/OG tags.
 
 ### 2025-08-15
-- Embedded live player on Home; added Featured/Latest layout.
+- Embedded live player on Home; added Featured card.
 
 ### 2025-08-10
 - Initial GitHub Pages scaffold; base theme (purple, gold, black).

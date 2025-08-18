@@ -9,16 +9,14 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
   <style>
-    /* Small additions for the collapsible list + compact song items */
+    /* Collapsible songs (small inline CSS for clarity) */
     details.songs { max-width: 720px; margin: 0.75rem auto 0; }
     details.songs summary {
-      list-style: none;
-      cursor: pointer;
-      user-select: none;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: .5rem; padding: .65rem .9rem; border-radius: 12px;
+      list-style: none; cursor: pointer; user-select: none;
+      display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+      padding: .65rem .9rem; border-radius: 12px;
       background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
     }
     details.songs summary::-webkit-details-marker { display: none; }
@@ -28,16 +26,12 @@
     .song-item { display: flex; align-items: center; gap: .65rem; padding: .5rem .25rem; }
     .song-art {
       width: 36px; height: 36px; border-radius: 8px; object-fit: cover;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06);
     }
     .song-text { display: flex; flex-direction: column; line-height: 1.2; }
     .song-title { font-weight: 600; }
     .song-artist { color: #bdbdbd; font-size: .92rem; }
-    .ad-break {
-      text-align: center; color: #bdbdbd; font-size: .85rem;
-      opacity: .9; padding: .25rem 0;
-    }
+    .ad-break { text-align: center; color: #bdbdbd; font-size: .85rem; opacity: .9; padding: .25rem 0; }
   </style>
 </head>
 <body>
@@ -50,7 +44,7 @@
 </header>
 
 <main>
-  <!-- Hero: short intro + CTA -->
+  <!-- Hero -->
   <section class="hero hero-image">
     <div class="hero-inner">
       <h1>Stream KBBG FM 88.1</h1>
@@ -59,15 +53,13 @@
     </div>
   </section>
 
-  <!-- On Air: modern player card (same look as listen.html) -->
+  <!-- Live player -->
   <section class="onair" aria-label="KBBG 88.1 Live Player">
     <div class="onair-box">
       <h2 class="section-title">On Air</h2>
 
-      <!-- Now Playing -->
       <div id="np-home" class="now-playing" aria-live="polite"></div>
 
-      <!-- Player -->
       <audio id="homePlayer" class="player-audio" controls preload="none">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
@@ -81,7 +73,7 @@
       </div>
       <p class="note">Tip: browsers block autoplay — tap Play to start.</p>
 
-      <!-- Collapsible Last 5 Songs (ads excluded, ad breaks marked) -->
+      <!-- Collapsible Last 5 Songs -->
       <details class="songs" id="last5" aria-labelledby="last5-summary">
         <summary id="last5-summary">
           <span>Last 5 Songs</span>
@@ -92,7 +84,7 @@
     </div>
   </section>
 
-  <!-- Featured (kept simple + consistent) -->
+  <!-- Featured (kept, simple) -->
   <section class="featured">
     <article class="featured-card">
       <img src="assets/KBBGFM88One400x400.png" alt="KBBG studio" />
@@ -106,34 +98,6 @@
         <a class="btn btn-gold" href="listen.html">Play the Stream</a>
       </div>
     </article>
-  </section>
-
-  <!-- Latest (placeholders; you can wire posts later) -->
-  <section class="latest">
-    <h2 class="section-title">Latest</h2>
-    <div class="latest-list">
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=201" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Radio Schedule</span></div>
-          <h3>Upcoming Radio Schedule</h3>
-        </div>
-      </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=202" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Culture</span></div>
-          <h3>Community Spotlight</h3>
-        </div>
-      </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=203" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Music</span></div>
-          <h3>Weekend Mix: Local DJs</h3>
-        </div>
-      </a>
-    </div>
   </section>
 </main>
 
@@ -159,7 +123,6 @@
     const t = (item?.title || '').toLowerCase();
     const a = (item?.artist || '').toLowerCase();
     const type = (item?.cue_type || '').toLowerCase();
-    // Heuristics: skip ads/jingles/station ids
     return type.includes('advert')
         || /(^|\s)(ad|advert|advertisement|commercial)(\s|$)/.test(t)
         || /(sweep|jingle|station id|stn id)/.test(t)
@@ -189,7 +152,7 @@
       if(!r.ok) throw new Error('HTTP '+r.status);
       const data = await r.json();
       renderNowPlaying('np-home', data);
-    }catch(e){ /*silent*/ }
+    }catch(e){}
   }
 
   async function fetchRecent(){
@@ -206,28 +169,18 @@
       let pendingAdBreak = false;
 
       for(const item of arr){
-        if(isAd(item)){
-          // mark that an ad break occurred; don't add to songs
-          pendingAdBreak = true;
-          continue;
-        }
-        // Only push song items; insert ad-break marker if needed
+        if(isAd(item)){ pendingAdBreak = true; continue; }
         if(songs.length < 5){
-          if(pendingAdBreak && songs.length>0){
-            songs.push({ _adBreak: true });
-          }
+          if(pendingAdBreak && songs.length>0){ songs.push({ _adBreak: true }); }
           pendingAdBreak = false;
           songs.push({
             title: item.title || '',
             artist: item.artist || '',
             art: item.artwork || ''
           });
-        } else {
-          break;
-        }
+        } else break;
       }
 
-      // Render
       for(const s of songs){
         if(s._adBreak){
           const li = document.createElement('li');
@@ -249,14 +202,12 @@
         listEl.appendChild(li);
       }
 
-      // If nothing rendered (e.g., only ads), show a friendly note
       if(!listEl.children.length){
         const li = document.createElement('li');
         li.className = 'ad-break';
         li.textContent = 'No recent songs available.';
         listEl.appendChild(li);
       }
-
     }catch(e){
       const li = document.createElement('li');
       li.className = 'ad-break';
@@ -265,11 +216,9 @@
     }
   }
 
-  // Initial loads + refresh intervals
   fetchNowPlaying();
   fetchRecent();
   setInterval(fetchNowPlaying, 20000);
-  // Refresh recent less frequently
   setInterval(fetchRecent, 60000);
 </script>
 </body>
