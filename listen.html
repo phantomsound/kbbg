@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Live streaming from one of the nation’s oldest Black-owned public radio stations." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=11" />
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=12" />
+  <link rel="stylesheet" href="styles.css?v=12" />
 </head>
 <body>
 <header class="site-header">
@@ -29,16 +29,22 @@
   </section>
 
   <section class="card center narrow" aria-label="KBBG 88.1 Live Stream">
-    <audio id="pagePlayer" controls preload="none">
+    <!-- Hidden native audio -->
+    <audio id="pageAudio" preload="metadata">
       <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
       <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
-      Your browser does not support the audio element.
     </audio>
-    <div id="np-page" class="now-playing" aria-live="polite"></div>
-    <div class="player-actions">
-      <button class="btn btn-gold" onclick="pp().play()">Play</button>
-      <button class="btn" onclick="pp().pause()">Pause</button>
+
+    <!-- Custom controls -->
+    <div class="player">
+      <button id="pagePlay" class="btn btn-gold player-btn" aria-label="Play/Pause">▶</button>
+      <div class="progress" id="pageBar" role="progressbar" aria-label="Playback position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+        <div class="progress-fill" id="pageFill"></div>
+      </div>
+      <span class="time" id="pageTime">00:00</span>
     </div>
+
+    <div id="np-page" class="now-playing" aria-live="polite"></div>
     <p class="note">Autoplay is blocked by browsers—tap Play to start.</p>
   </section>
 
@@ -58,9 +64,47 @@
 </footer>
 
 <script>
-  const pp = () => document.getElementById('pagePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
+  // ------- Custom Player (Listen page) -------
+  const pa = document.getElementById('pageAudio');
+  const pbtn = document.getElementById('pagePlay');
+  const pbar = document.getElementById('pageBar');
+  const pfill = document.getElementById('pageFill');
+  const ptime = document.getElementById('pageTime');
+
+  function fmt(t){if(!isFinite(t)) return "00:00"; const m=Math.floor(t/60), s=Math.floor(t%60); return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+
+  pbtn.addEventListener('click', async () => {
+    try{
+      if (pa.paused) { await pa.play(); pbtn.textContent='⏸'; }
+      else { pa.pause(); pbtn.textContent='▶'; }
+    }catch(e){}
+  });
+
+  function updateUI(){
+    const dur = pa.duration || 0, cur = pa.currentTime || 0;
+    const pct = dur ? (cur/dur)*100 : 0;
+    pfill.style.width = pct + '%';
+    pbar.setAttribute('aria-valuenow', Math.round(pct));
+    ptime.textContent = fmt(cur);
+  }
+  pa.addEventListener('timeupdate', updateUI);
+  pa.addEventListener('loadedmetadata', updateUI);
+  pa.addEventListener('ended', ()=>{ pbtn.textContent='▶'; });
+
+  function seekFromClientX(clientX){
+    const rect = pbar.getBoundingClientRect();
+    const ratio = Math.min(Math.max((clientX - rect.left)/rect.width, 0), 1);
+    if (isFinite(pa.duration)) pa.currentTime = ratio * pa.duration;
+  }
+  pbar.addEventListener('click', (e)=>seekFromClientX(e.clientX));
+  pbar.addEventListener('keydown', (e)=>{
+    if (e.key==='ArrowRight') { pa.currentTime += 5; e.preventDefault(); }
+    if (e.key==='ArrowLeft')  { pa.currentTime -= 5; e.preventDefault(); }
+  });
+
+  // ------- Now Playing -------
   async function fetchNowPlaying(elId){
     try{
       const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -82,4 +126,3 @@
 </script>
 </body>
 </html>
-

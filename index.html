@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=11" />
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=12" />
+  <link rel="stylesheet" href="styles.css?v=12" />
 </head>
 <body>
 <header class="site-header">
@@ -32,20 +32,33 @@
     </div>
   </section>
 
-  <!-- Embedded player (simple) -->
+  <!-- Custom Player -->
   <section class="card center narrow" aria-label="KBBG 88.1 Live Player">
     <h2 class="section-title">On Air</h2>
-    <audio id="homePlayer" controls preload="none">
+
+    <!-- Hidden native audio -->
+    <audio id="homeAudio" preload="metadata">
       <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
       <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
-      Your browser does not support the audio element.
     </audio>
-    <div id="np-home" class="now-playing" aria-live="polite"></div>
-    <div class="player-actions">
-      <button class="btn btn-gold" onclick="hp().play()">Play</button>
-      <button class="btn" onclick="hp().pause()">Pause</button>
+
+    <!-- Custom controls -->
+    <div class="player">
+      <button id="homePlay" class="btn btn-gold player-btn" aria-label="Play/Pause">▶</button>
+      <div class="progress" id="homeBar" role="progressbar" aria-label="Playback position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+        <div class="progress-fill" id="homeFill"></div>
+      </div>
+      <span class="time" id="homeTime">00:00</span>
     </div>
+
+    <div id="np-home" class="now-playing" aria-live="polite"></div>
     <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
+  </section>
+
+  <!-- Last 10 songs -->
+  <section class="card center narrow">
+    <h2 class="section-title">Last 10 Songs</h2>
+    <ul id="history" class="history-list" aria-live="polite"></ul>
   </section>
 
   <!-- Minimal app links -->
@@ -65,9 +78,51 @@
 </footer>
 
 <script>
-  const hp = () => document.getElementById('homePlayer');
+  // Year
   document.getElementById('y').textContent = new Date().getFullYear();
 
+  // ------- Custom Player (Home) -------
+  const ha = document.getElementById('homeAudio');
+  const playBtn = document.getElementById('homePlay');
+  const bar = document.getElementById('homeBar');
+  const fill = document.getElementById('homeFill');
+  const timeEl = document.getElementById('homeTime');
+
+  function fmt(t){if(!isFinite(t)) return "00:00"; const m=Math.floor(t/60), s=Math.floor(t%60); return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+
+  playBtn.addEventListener('click', async () => {
+    try{
+      if (ha.paused) { await ha.play(); playBtn.textContent='⏸'; }
+      else { ha.pause(); playBtn.textContent='▶'; }
+    }catch(e){}
+  });
+
+  function updateUI(){
+    const dur = ha.duration || 0, cur = ha.currentTime || 0;
+    const pct = dur ? (cur/dur)*100 : 0;
+    fill.style.width = pct + '%';
+    bar.setAttribute('aria-valuenow', Math.round(pct));
+    timeEl.textContent = fmt(cur);
+  }
+  ha.addEventListener('timeupdate', updateUI);
+  ha.addEventListener('loadedmetadata', updateUI);
+  ha.addEventListener('ended', ()=>{ playBtn.textContent='▶'; });
+
+  // Seek by click/drag
+  function seekFromClientX(clientX){
+    const rect = bar.getBoundingClientRect();
+    const ratio = Math.min(Math.max((clientX - rect.left)/rect.width, 0), 1);
+    if (isFinite(ha.duration)) ha.currentTime = ratio * ha.duration;
+  }
+  bar.addEventListener('click', (e)=>seekFromClientX(e.clientX));
+  bar.addEventListener('keydown', (e)=>{
+    if (e.key==='ArrowRight') { ha.currentTime += 5; e.preventDefault(); }
+    if (e.key==='ArrowLeft')  { ha.currentTime -= 5; e.preventDefault(); }
+  });
+
+  // ------- Now Playing + History (Radio.co Public API) -------
+  // current: https://public.radio.co/api/v2/se50df870e/track/current
+  // history: https://public.radio.co/api/v2/se50df870e/track/history
   async function fetchNowPlaying(elId){
     try{
       const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -84,8 +139,46 @@
         : '';
     }catch(e){}
   }
+
+  function relTime(iso){
+    const d = iso ? new Date(iso) : null;
+    if(!d || isNaN(d)) return '';
+    const diff = (Date.now() - d.getTime())/1000; // seconds
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff/60)+'m ago';
+    if (diff < 86400) return Math.floor(diff/3600)+'h ago';
+    return d.toLocaleString();
+  }
+
+  async function fetchHistory(limit=10){
+    const list = document.getElementById('history');
+    try{
+      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/history', {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const json = await res.json();
+      const arr = Array.isArray(json?.data) ? json.data.slice(0, limit) : [];
+      list.innerHTML = arr.map(item=>{
+        const title = item?.title || '';
+        const artist = item?.artist || '';
+        const art = item?.artwork || '';
+        const when = relTime(item?.played_at || item?.start_time);
+        return `<li class="history-row">
+          ${art ? `<img src="${art}" alt="" />` : `<div class="art ph"></div>`}
+          <div class="meta">
+            <div class="t">${artist ? `<strong>${artist}</strong> — ` : ''}${title}</div>
+            <div class="s">${when}</div>
+          </div>
+        </li>`;
+      }).join('');
+    }catch(e){
+      list.innerHTML = '<li class="history-empty">No history available right now.</li>';
+    }
+  }
+
   fetchNowPlaying('np-home');
+  fetchHistory(10);
   setInterval(()=>fetchNowPlaying('np-home'), 20000);
+  setInterval(()=>fetchHistory(10), 60000);
 </script>
 </body>
 </html>
