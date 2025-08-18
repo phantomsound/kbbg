@@ -18,7 +18,8 @@ Simple, fast site for KBBG FM 88.1 hosted on GitHub Pages.
 
 ## Now Playing & Recent
 - Current track: `https://public.radio.co/api/v2/se50df870e/track/current`
-- Recent history (for last 5 songs): `https://public.radio.co/api/v2/se50df870e/history`  
+- Recent history (for last 5 songs):  
+  `https://public.radio.co/api/v2/se50df870e/history`  
   - Ads are filtered out (by keywords like “ad”, “advert”, “promo”, “sweeper”, “station id”, “psa”).
 
 ## Assets

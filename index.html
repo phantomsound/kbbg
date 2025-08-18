@@ -9,7 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body class="theme-gradient">
 <header class="site-header">
@@ -42,6 +42,11 @@
       <div class="np-track" id="np-track-home">Tap play to start the stream</div>
       <div class="controls">
         <button id="play-home" class="control-btn" aria-label="Play/Pause"></button>
+        <div class="eq-bars" id="eq-home" hidden>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
       </div>
       <audio id="homePlayer" preload="none">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
@@ -51,7 +56,7 @@
     </div>
   </section>
 
-  <!-- Last 5 songs (collapsed by default; ads excluded) -->
+  <!-- Last 5 songs -->
   <section class="recent">
     <details id="recent-details" class="recent-details">
       <summary>
@@ -76,24 +81,23 @@
 </footer>
 
 <script>
-  // Utility
   const $ = (s)=>document.querySelector(s);
   const homeAudio = $('#homePlayer');
   const playBtn = $('#play-home');
   const npTitle = $('#np-title-home');
   const npTrack = $('#np-track-home');
   const artImg  = $('#art-home');
+  const eqBars  = $('#eq-home');
   const recentList = $('#recent-list');
 
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // Toggle play state UI
   function setBtnPlaying(isPlaying){
     playBtn.classList.toggle('is-playing', !!isPlaying);
     playBtn.setAttribute('aria-pressed', !!isPlaying);
+    eqBars.hidden = !isPlaying;
   }
 
-  // Play/Pause
   playBtn.addEventListener('click', async ()=>{
     try{
       if(homeAudio.paused){
@@ -103,14 +107,11 @@
         homeAudio.pause();
         setBtnPlaying(false);
       }
-    }catch(e){
-      console.warn(e);
-    }
+    }catch(e){ console.warn(e); }
   });
   homeAudio.addEventListener('pause', ()=>setBtnPlaying(false));
   homeAudio.addEventListener('play',  ()=>setBtnPlaying(true));
 
-  // Now Playing
   async function fetchNowPlaying(){
     try{
       const r = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -127,33 +128,28 @@
       }
       npTitle.textContent = 'Now Playing';
       npTrack.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
-    }catch(e){
-      // silent
-    }
+    }catch(e){}
   }
 
-  // Recent 5 (ads excluded)
-  function looksLikeAd(t, a){
+  function looksLikeAd(t,a){
     const s = (t + ' ' + a).toLowerCase();
-    return s.includes('ad ') || s.includes('advert') || s.includes('sweeper') || s.includes('promo') || s.includes('station id') || s.includes('psa');
+    return s.includes('ad ')||s.includes('advert')||s.includes('sweeper')||s.includes('promo')||s.includes('station id')||s.includes('psa');
   }
   async function fetchRecentFive(){
     try{
       const r = await fetch('https://public.radio.co/api/v2/se50df870e/history', {cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
       const j = await r.json();
-      const items = Array.isArray(j?.data) ? j.data : [];
-
+      const items = Array.isArray(j?.data)? j.data : [];
       const songs = [];
       for(const it of items){
         const t = (it?.track?.title || it?.title || '').trim();
         const a = (it?.track?.artist || it?.artist || '').trim();
         if(!t && !a) continue;
         if(looksLikeAd(t,a)) continue;
-        songs.push({title: t, artist: a});
-        if(songs.length === 5) break;
+        songs.push({title:t, artist:a});
+        if(songs.length===5) break;
       }
-
       recentList.innerHTML = songs.map(s => `
         <li class="recent-item">
           <div class="ri-meta">
@@ -161,18 +157,18 @@
             <div class="ri-artist">${s.artist || 'Unknown Artist'}</div>
           </div>
         </li>
-      `).join('') || `<li class="recent-item"><div class="ri-meta"><div class="ri-title">No recent songs found</div></div></li>`;
-      recentList.setAttribute('aria-busy', 'false');
+      `).join('') || `<li><div class="ri-title">No recent songs found</div></li>`;
+      recentList.setAttribute('aria-busy','false');
     }catch(e){
-      recentList.innerHTML = `<li class="recent-item"><div class="ri-meta"><div class="ri-title">Could not load recent songs</div></div></li>`;
-      recentList.setAttribute('aria-busy', 'false');
+      recentList.innerHTML = `<li><div class="ri-title">Could not load recent songs</div></li>`;
+      recentList.setAttribute('aria-busy','false');
     }
   }
 
   fetchNowPlaying();
   fetchRecentFive();
-  setInterval(fetchNowPlaying, 20000);
-  setInterval(fetchRecentFive, 60000);
+  setInterval(fetchNowPlaying,20000);
+  setInterval(fetchRecentFive,60000);
 </script>
 </body>
 </html>

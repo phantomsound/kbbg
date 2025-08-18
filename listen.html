@@ -6,7 +6,10 @@
   <title>KBBG FM 88.1 — Listen Live</title>
   <meta name="description" content="Listen live to KBBG FM 88.1. Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta name="theme-color" content="#3b0b7a" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
+  <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
+  <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body class="theme-gradient">
 <header class="site-header">
@@ -18,7 +21,6 @@
 </header>
 
 <main>
-  <!-- Player-only page with unified style -->
   <section class="player-card player-card--center" aria-label="KBBG Live Player">
     <div class="player-left">
       <div class="artwrap" id="artwrap-live" aria-hidden="true">
@@ -30,6 +32,11 @@
       <div class="np-track" id="np-track-live">Tap play to start the stream</div>
       <div class="controls">
         <button id="play-live" class="control-btn" aria-label="Play/Pause"></button>
+        <div class="eq-bars" id="eq-live" hidden>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
       </div>
       <audio id="livePlayer" preload="none">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
@@ -56,12 +63,14 @@
   const npT       = document.getElementById('np-title-live');
   const npTr      = document.getElementById('np-track-live');
   const artImg    = document.getElementById('art-live');
+  const eqBars    = document.getElementById('eq-live');
 
   document.getElementById('y').textContent = new Date().getFullYear();
 
   function setBtnPlaying(isPlaying){
     playBtn.classList.toggle('is-playing', !!isPlaying);
     playBtn.setAttribute('aria-pressed', !!isPlaying);
+    eqBars.hidden = !isPlaying;
   }
 
   playBtn.addEventListener('click', async ()=>{
@@ -73,9 +82,7 @@
         liveAudio.pause();
         setBtnPlaying(false);
       }
-    }catch(e){
-      console.warn(e);
-    }
+    }catch(e){ console.warn(e); }
   });
   liveAudio.addEventListener('pause', ()=>setBtnPlaying(false));
   liveAudio.addEventListener('play',  ()=>setBtnPlaying(true));
@@ -96,9 +103,7 @@
       }
       npT.textContent = 'Now Playing';
       npTr.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
-    }catch(e){
-      // silent
-    }
+    }catch(e){}
   }
 
   fetchNowPlaying();
