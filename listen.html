@@ -3,80 +3,106 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Listen Live — KBBG FM 88.1</title>
-  <meta name="description" content="Listen live to KBBG FM 88.1." />
-  <meta name="theme-color" content="#4B0082" />
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <title>KBBG FM 88.1 — Listen Live</title>
+  <meta name="description" content="Listen live to KBBG FM 88.1. Music, culture, and community-focused talk from Waterloo, Iowa." />
+  <meta name="theme-color" content="#3b0b7a" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
-<body>
+<body class="theme-gradient">
 <header class="site-header">
   <a class="logo" href="./">KBBG 88.1</a>
   <nav class="nav">
     <a href="./">Home</a>
-    <a class="btn btn-gold" href="listen.html" aria-current="page">Listen</a>
+    <a class="btn btn-gold" href="listen.html" aria-current="page">Listen Live</a>
   </nav>
 </header>
 
 <main>
-  <section class="listen-hero">
-    <h1>KBBG FM 88.1 — Listen Live</h1>
-    <p>Press play. If playback fails, try the mobile app links below.</p>
-  </section>
-
-  <section class="player-wrap" aria-label="KBBG 88.1 Live Stream">
-    <audio id="pagePlayer" controls preload="none">
-      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
-      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
-      Your browser does not support the audio element.
-    </audio>
-    <div id="np-page" class="now-playing" aria-live="polite"></div>
-    <div class="player-actions">
-      <button class="btn btn-gold" onclick="pp().play()">Play</button>
-      <button class="btn" onclick="pp().pause()">Pause</button>
+  <!-- Player-only page with unified style -->
+  <section class="player-card player-card--center" aria-label="KBBG Live Player">
+    <div class="player-left">
+      <div class="artwrap" id="artwrap-live" aria-hidden="true">
+        <img id="art-live" src="/kbbg/assets/KBBGFM88One%20400x400.png" alt="" />
+      </div>
     </div>
-    <p class="note">Autoplay is blocked by browsers—tap Play to start.</p>
-  </section>
-
-  <section class="app-cta">
-    <h2>Prefer the app?</h2>
-    <div class="store-row">
-      <a class="store-badge" target="_blank" rel="noopener"
-         href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Get it on Google Play</a>
-      <a class="store-badge" target="_blank" rel="noopener"
-         href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">Download on the App Store</a>
+    <div class="player-right">
+      <div class="np-title" id="np-title-live">Now Playing</div>
+      <div class="np-track" id="np-track-live">Tap play to start the stream</div>
+      <div class="controls">
+        <button id="play-live" class="control-btn" aria-label="Play/Pause"></button>
+      </div>
+      <audio id="livePlayer" preload="none">
+        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+      </audio>
+      <div class="store-row store-row--inline">
+        <a class="store-badge" target="_blank" rel="noopener"
+           href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+        <a class="store-badge" target="_blank" rel="noopener"
+           href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
+      </div>
+      <p class="tiny-note">If audio doesn’t start, tap Play. Network policies may block streams.</p>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
-  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="./">Home</a></p>
+  <p>© <span id="y"></span> KBBG FM 88.1</p>
 </footer>
 
 <script>
-  const pp = () => document.getElementById('pagePlayer');
+  const liveAudio = document.getElementById('livePlayer');
+  const playBtn   = document.getElementById('play-live');
+  const npT       = document.getElementById('np-title-live');
+  const npTr      = document.getElementById('np-track-live');
+  const artImg    = document.getElementById('art-live');
+
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // Now Playing — refresh every 20s
-  async function fetchNowPlaying(elId){
-    try{
-      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      const data = await res.json();
-      const t = data?.data;
-      const title = t?.title || '';
-      const artist = t?.artist || '';
-      const art = t?.artwork || '';
-      const el = document.getElementById(elId);
-      if(!el) return;
-      if(title || artist){
-        el.innerHTML = (art ? `<img src="${art}" alt="" />` : '') + `${artist ? artist+' — ' : ''}${title}`;
-      } else {
-        el.textContent = '';
-      }
-    }catch(e){}
+  function setBtnPlaying(isPlaying){
+    playBtn.classList.toggle('is-playing', !!isPlaying);
+    playBtn.setAttribute('aria-pressed', !!isPlaying);
   }
-  fetchNowPlaying('np-page');
-  setInterval(()=>fetchNowPlaying('np-page'), 20000);
+
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if(liveAudio.paused){
+        await liveAudio.play();
+        setBtnPlaying(true);
+      }else{
+        liveAudio.pause();
+        setBtnPlaying(false);
+      }
+    }catch(e){
+      console.warn(e);
+    }
+  });
+  liveAudio.addEventListener('pause', ()=>setBtnPlaying(false));
+  liveAudio.addEventListener('play',  ()=>setBtnPlaying(true));
+
+  async function fetchNowPlaying(){
+    try{
+      const r = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const d = j?.data;
+      const title = (d?.title || '').trim();
+      const artist = (d?.artist || '').trim();
+      const art = (d?.artwork || '').trim();
+
+      if(art){
+        artImg.src = art;
+        document.getElementById('artwrap-live').classList.add('has-art');
+      }
+      npT.textContent = 'Now Playing';
+      npTr.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
+    }catch(e){
+      // silent
+    }
+  }
+
+  fetchNowPlaying();
+  setInterval(fetchNowPlaying, 20000);
 </script>
 </body>
 </html>

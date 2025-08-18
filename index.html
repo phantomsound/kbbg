@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KBBG FM 88.1 — Home</title>
-  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet." />
-  <meta name="theme-color" content="#4B0082" />
+  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet.">
+  <meta name="theme-color" content="#3b0b7a" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
-<body>
+<body class="theme-gradient">
 <header class="site-header">
   <a class="logo" href="./">KBBG 88.1</a>
   <nav class="nav">
@@ -22,74 +22,46 @@
 
 <main>
   <!-- Hero -->
-  <section class="hero hero-image">
+  <section class="hero">
     <div class="hero-inner">
       <h1>Stream KBBG FM 88.1</h1>
-      <p>Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet.</p>
-      <a class="btn btn-gold btn-lg" href="listen.html">Open Player Page</a>
+      <p>Music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations.</p>
+      <a class="btn btn-gold btn-lg" href="listen.html">Open Full Player</a>
     </div>
   </section>
 
-  <!-- Embedded player -->
-  <section class="onair" aria-label="KBBG 88.1 Live Player">
-    <div class="onair-box">
-      <h2 class="section-title">On Air</h2>
-      <audio id="homePlayer" controls preload="none">
+  <!-- Player card -->
+  <section class="player-card" aria-label="KBBG Live Player">
+    <div class="player-left">
+      <div class="artwrap" id="artwrap-home" aria-hidden="true">
+        <img id="art-home" src="/kbbg/assets/KBBGFM88One%20400x400.png" alt="" />
+      </div>
+    </div>
+    <div class="player-right">
+      <div class="np-title" id="np-title-home">Now Playing</div>
+      <div class="np-track" id="np-track-home">Tap play to start the stream</div>
+      <div class="controls">
+        <button id="play-home" class="control-btn" aria-label="Play/Pause"></button>
+      </div>
+      <audio id="homePlayer" preload="none">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
-        Your browser does not support the audio element.
       </audio>
-      <div id="np-home" class="now-playing" aria-live="polite"></div>
-      <div class="player-actions">
-        <button class="btn btn-gold" onclick="homeP().play()">Play</button>
-        <button class="btn" onclick="homeP().pause()">Pause</button>
-      </div>
-      <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
+      <p class="tiny-note">Tip: mobile browsers block autoplay—tap Play to start.</p>
     </div>
   </section>
 
-  <!-- Featured -->
-  <section class="featured">
-    <article class="featured-card">
-      <img src="assets/KBBGFM88One 400x400.png" alt="KBBG studio" />
-      <div class="featured-body">
-        <div class="chips">
-          <span class="chip">Music</span>
-          <span class="chip">Community</span>
-        </div>
-        <h2>Live from Waterloo</h2>
-        <p>Local voices, culture, and talk shows—24/7 on KBBG.</p>
-        <a class="btn btn-gold" href="listen.html">Play the Stream</a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Latest -->
-  <section class="latest">
-    <h2 class="section-title">Latest</h2>
-    <div class="latest-list">
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=201" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Radio Schedule</span></div>
-          <h3>Upcoming Radio Schedule</h3>
-        </div>
-      </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=202" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Culture</span></div>
-          <h3>Community Spotlight</h3>
-        </div>
-      </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=203" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Music</span></div>
-          <h3>Weekend Mix: Local DJs</h3>
-        </div>
-      </a>
-    </div>
+  <!-- Last 5 songs (collapsed by default; ads excluded) -->
+  <section class="recent">
+    <details id="recent-details" class="recent-details">
+      <summary>
+        <span class="caret" aria-hidden="true"></span>
+        Last 5 Songs
+      </summary>
+      <ol id="recent-list" class="recent-list" aria-live="polite" aria-busy="true">
+        <!-- filled by JS -->
+      </ol>
+    </details>
   </section>
 </main>
 
@@ -104,29 +76,103 @@
 </footer>
 
 <script>
-  const homeP = () => document.getElementById('homePlayer');
+  // Utility
+  const $ = (s)=>document.querySelector(s);
+  const homeAudio = $('#homePlayer');
+  const playBtn = $('#play-home');
+  const npTitle = $('#np-title-home');
+  const npTrack = $('#np-track-home');
+  const artImg  = $('#art-home');
+  const recentList = $('#recent-list');
+
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  async function fetchNowPlaying(elId){
-    try{
-      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      const data = await res.json();
-      const t = data?.data;
-      const title = t?.title || '';
-      const artist = t?.artist || '';
-      const art = t?.artwork || '';
-      const el = document.getElementById(elId);
-      if(!el) return;
-      if(title || artist){
-        el.innerHTML = (art ? `<img src="${art}" alt="" />` : '') + `${artist ? artist+' — ' : ''}${title}`;
-      } else {
-        el.textContent = '';
-      }
-    }catch(e){}
+  // Toggle play state UI
+  function setBtnPlaying(isPlaying){
+    playBtn.classList.toggle('is-playing', !!isPlaying);
+    playBtn.setAttribute('aria-pressed', !!isPlaying);
   }
-  fetchNowPlaying('np-home');
-  setInterval(()=>fetchNowPlaying('np-home'), 20000);
+
+  // Play/Pause
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if(homeAudio.paused){
+        await homeAudio.play();
+        setBtnPlaying(true);
+      }else{
+        homeAudio.pause();
+        setBtnPlaying(false);
+      }
+    }catch(e){
+      console.warn(e);
+    }
+  });
+  homeAudio.addEventListener('pause', ()=>setBtnPlaying(false));
+  homeAudio.addEventListener('play',  ()=>setBtnPlaying(true));
+
+  // Now Playing
+  async function fetchNowPlaying(){
+    try{
+      const r = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const d = j?.data;
+      const title = (d?.title || '').trim();
+      const artist = (d?.artist || '').trim();
+      const art = (d?.artwork || '').trim();
+
+      if(art) {
+        artImg.src = art;
+        $('#artwrap-home').classList.add('has-art');
+      }
+      npTitle.textContent = 'Now Playing';
+      npTrack.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
+    }catch(e){
+      // silent
+    }
+  }
+
+  // Recent 5 (ads excluded)
+  function looksLikeAd(t, a){
+    const s = (t + ' ' + a).toLowerCase();
+    return s.includes('ad ') || s.includes('advert') || s.includes('sweeper') || s.includes('promo') || s.includes('station id') || s.includes('psa');
+  }
+  async function fetchRecentFive(){
+    try{
+      const r = await fetch('https://public.radio.co/api/v2/se50df870e/history', {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const items = Array.isArray(j?.data) ? j.data : [];
+
+      const songs = [];
+      for(const it of items){
+        const t = (it?.track?.title || it?.title || '').trim();
+        const a = (it?.track?.artist || it?.artist || '').trim();
+        if(!t && !a) continue;
+        if(looksLikeAd(t,a)) continue;
+        songs.push({title: t, artist: a});
+        if(songs.length === 5) break;
+      }
+
+      recentList.innerHTML = songs.map(s => `
+        <li class="recent-item">
+          <div class="ri-meta">
+            <div class="ri-title">${s.title || 'Unknown Title'}</div>
+            <div class="ri-artist">${s.artist || 'Unknown Artist'}</div>
+          </div>
+        </li>
+      `).join('') || `<li class="recent-item"><div class="ri-meta"><div class="ri-title">No recent songs found</div></div></li>`;
+      recentList.setAttribute('aria-busy', 'false');
+    }catch(e){
+      recentList.innerHTML = `<li class="recent-item"><div class="ri-meta"><div class="ri-title">Could not load recent songs</div></div></li>`;
+      recentList.setAttribute('aria-busy', 'false');
+    }
+  }
+
+  fetchNowPlaying();
+  fetchRecentFive();
+  setInterval(fetchNowPlaying, 20000);
+  setInterval(fetchRecentFive, 60000);
 </script>
 </body>
 </html>
