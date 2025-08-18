@@ -9,30 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=9" />
-  <style>
-    /* Collapsible songs (small inline CSS for clarity) */
-    details.songs { max-width: 720px; margin: 0.75rem auto 0; }
-    details.songs summary {
-      list-style: none; cursor: pointer; user-select: none;
-      display: flex; align-items: center; justify-content: space-between; gap: .5rem;
-      padding: .65rem .9rem; border-radius: 12px;
-      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
-    }
-    details.songs summary::-webkit-details-marker { display: none; }
-    details.songs[open] summary { background: rgba(255,255,255,.08); }
-
-    ul.song-list { list-style: none; margin: .75rem 0 0; padding: 0; }
-    .song-item { display: flex; align-items: center; gap: .65rem; padding: .5rem .25rem; }
-    .song-art {
-      width: 36px; height: 36px; border-radius: 8px; object-fit: cover;
-      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06);
-    }
-    .song-text { display: flex; flex-direction: column; line-height: 1.2; }
-    .song-title { font-weight: 600; }
-    .song-artist { color: #bdbdbd; font-size: .92rem; }
-    .ad-break { text-align: center; color: #bdbdbd; font-size: .85rem; opacity: .9; padding: .25rem 0; }
-  </style>
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body>
 <header class="site-header">
@@ -53,38 +30,40 @@
     </div>
   </section>
 
-  <!-- Live player -->
+  <!-- Live player (custom UI) -->
   <section class="onair" aria-label="KBBG 88.1 Live Player">
     <div class="onair-box">
       <h2 class="section-title">On Air</h2>
 
       <div id="np-home" class="now-playing" aria-live="polite"></div>
 
-      <audio id="homePlayer" class="player-audio" controls preload="none">
+      <audio id="homeAudio" preload="none" crossorigin="anonymous">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
-        Your browser does not support the audio element.
       </audio>
 
-      <div class="player-actions">
-        <button class="btn btn-gold" onclick="homeP().play()">Play</button>
-        <button class="btn" onclick="homeP().pause()">Pause</button>
-        <a class="btn" href="listen.html" title="Open full player page">Open Full Player</a>
+      <div class="custom-player" data-audio-id="homeAudio">
+        <button class="cp-btn cp-play" aria-label="Play/Pause"></button>
+        <div class="cp-visual">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <label class="cp-vol" aria-label="Volume">
+          <input type="range" min="0" max="1" step="0.01" value="0.9">
+        </label>
+        <a class="btn cp-open" href="listen.html" title="Open full player">Open</a>
       </div>
+
       <p class="note">Tip: browsers block autoplay — tap Play to start.</p>
 
       <!-- Collapsible Last 5 Songs -->
-      <details class="songs" id="last5" aria-labelledby="last5-summary">
-        <summary id="last5-summary">
-          <span>Last 5 Songs</span>
-          <span aria-hidden="true">▾</span>
-        </summary>
+      <details class="songs" id="last5">
+        <summary><span>Last 5 Songs</span><span aria-hidden="true">▾</span></summary>
         <ul id="recent-list" class="song-list"></ul>
       </details>
     </div>
   </section>
 
-  <!-- Featured (kept, simple) -->
+  <!-- Featured -->
   <section class="featured">
     <article class="featured-card">
       <img src="assets/KBBGFM88One400x400.png" alt="KBBG studio" />
@@ -112,9 +91,75 @@
 </footer>
 
 <script>
-  const homeP = ()=>document.getElementById('homePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
+  // ---- Player wiring (custom UI) ----
+  function wireCustomPlayer(wrapper){
+    const audioId = wrapper.getAttribute('data-audio-id');
+    const audio = document.getElementById(audioId);
+    const btn = wrapper.querySelector('.cp-play');
+    const visual = wrapper.querySelector('.cp-visual');
+    const vol = wrapper.querySelector('.cp-vol input');
+
+    let audioCtx, srcNode, analyser, rafId;
+
+    function setPlayingUI(playing){
+      wrapper.classList.toggle('is-playing', playing);
+      btn.classList.toggle('is-pause', playing);
+    }
+
+    btn.addEventListener('click', async () => {
+      if(audio.paused){
+        try{
+          await audio.play();
+          setPlayingUI(true);
+          initAnalyser();
+        }catch(e){
+          setPlayingUI(false);
+        }
+      }else{
+        audio.pause();
+        setPlayingUI(false);
+        stopAnalyser();
+      }
+    });
+
+    vol.addEventListener('input', () => { audio.volume = +vol.value; });
+    audio.addEventListener('ended', () => { setPlayingUI(false); stopAnalyser(); });
+    audio.addEventListener('pause', () => { setPlayingUI(false); stopAnalyser(); });
+
+    function initAnalyser(){
+      try{
+        if(!audioCtx){
+          audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+          srcNode = audioCtx.createMediaElementSource(audio);
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 64;
+          srcNode.connect(analyser);
+          analyser.connect(audioCtx.destination);
+        }
+        renderBars();
+      }catch(e){
+        // CORS or autoplay policy can block — fallback: CSS animation only
+      }
+    }
+    function stopAnalyser(){
+      if(rafId) cancelAnimationFrame(rafId);
+    }
+    function renderBars(){
+      const spans = visual.querySelectorAll('span');
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(data);
+      spans.forEach((s, i) => {
+        const v = data[i*2] || 0;
+        s.style.setProperty('--h', Math.max(8, (v/255)*28)+'px');
+      });
+      rafId = requestAnimationFrame(renderBars);
+    }
+  }
+  document.querySelectorAll('.custom-player').forEach(wireCustomPlayer);
+
+  // ---- Now playing + recent (Radio.co public API) ----
   const STATION = 'se50df870e';
   const CURRENT_URL = `https://public.radio.co/api/v2/${STATION}/track/current`;
   const RECENT_URL  = `https://public.radio.co/api/v2/${STATION}/track/recent?limit=20`;
@@ -137,10 +182,7 @@
     const artist = t?.artist || '';
     const art = t?.artwork || '';
     if(title || artist){
-      el.innerHTML = `
-        ${art ? `<img src="${art}" alt="" class="np-art" />` : ''}
-        <span class="np-text">${artist ? artist + ' — ' : ''}${title}</span>
-      `;
+      el.innerHTML = `${art ? `<img src="${art}" alt="" class="np-art" />` : ''}<span class="np-text">${artist ? artist + ' — ' : ''}${title}</span>`;
     } else {
       el.textContent = '';
     }
@@ -192,13 +234,7 @@
         const li = document.createElement('li');
         li.className = 'song-item';
         const art = s.art || 'assets/KBBGFM88One400x400.png';
-        li.innerHTML = `
-          <img class="song-art" src="${art}" alt="">
-          <div class="song-text">
-            <span class="song-title">${s.title}</span>
-            <span class="song-artist">${s.artist}</span>
-          </div>
-        `;
+        li.innerHTML = `<img class="song-art" src="${art}" alt=""><div class="song-text"><span class="song-title">${s.title}</span><span class="song-artist">${s.artist}</span></div>`;
         listEl.appendChild(li);
       }
 

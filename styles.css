@@ -1,4 +1,4 @@
-/* ---------- Base ---------- */
+/* ---------- Theme ---------- */
 :root{
   --purple:#4B0082;
   --purple-2:#2f0056;
@@ -20,7 +20,7 @@ body{
   background:#000;
 }
 
-/* ---------- Header / Nav ---------- */
+/* Header */
 .site-header{
   display:flex; align-items:center; justify-content:space-between;
   padding:14px 18px; position:sticky; top:0; z-index:20;
@@ -30,12 +30,10 @@ body{
 }
 .logo{color:#fff; text-decoration:none; font-weight:800; letter-spacing:.5px}
 .nav{display:flex; gap:10px; align-items:center}
-.nav a{
-  color:#fff; text-decoration:none; padding:8px 10px; border-radius:10px;
-}
+.nav a{color:#fff; text-decoration:none; padding:8px 10px; border-radius:10px}
 .nav a[aria-current="page"]{background:rgba(255,255,255,.06)}
 
-/* ---------- Buttons ---------- */
+/* Buttons */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
   padding:.65rem 1rem; border-radius:999px; border:1px solid var(--card-brd);
@@ -45,14 +43,13 @@ body{
 .btn:hover{transform:translateY(-1px); background:rgba(255,255,255,0.05)}
 .btn:active{transform:translateY(0)}
 .btn-lg{padding:.8rem 1.15rem; font-weight:600}
-
 .btn-gold{
   background:linear-gradient(135deg, var(--gold), #f9d976);
   color:#1a1a1a; border-color:transparent; font-weight:700;
 }
 .btn-gold:hover{filter:brightness(1.03)}
 
-/* ---------- Hero ---------- */
+/* Hero */
 .hero{position:relative; overflow:hidden}
 .hero-image{
   min-height:45vh;
@@ -63,27 +60,19 @@ body{
 .hero h1{margin:0 0 .7rem; font-size:clamp(1.8rem,3vw,2.4rem)}
 .hero p{margin:.25rem auto 1rem; color:var(--muted); max-width:60ch}
 
-/* ---------- On Air / Player Card ---------- */
-.onair{
-  background:linear-gradient(160deg, var(--purple), #000);
-  padding:2rem 1rem 3rem;
-}
+/* Player Section */
+.onair{background:linear-gradient(160deg, var(--purple), #000); padding:2rem 1rem 3rem}
 .onair--solo{min-height:calc(100vh - 140px); display:grid; place-items:center}
 .onair-box{
   max-width:720px; margin:0 auto; padding:1.5rem;
-  background:var(--card);
-  border:1px solid var(--card-brd);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
+  background:var(--card); border:1px solid var(--card-brd);
+  border-radius:var(--radius); box-shadow:var(--shadow);
 }
 .section-title{margin:0 0 .75rem; font-size:1.25rem; letter-spacing:.25px}
 
-.player-audio, audio{width:100%; margin:.75rem 0 1rem}
-.player-actions{display:flex; gap:.75rem; justify-content:center; margin-top:.5rem}
-.note{color:var(--muted); font-size:.9rem; text-align:center}
-
+/* Now Playing */
 .now-playing{
-  display:flex; align-items:center; gap:.75rem; margin:.5rem 0 0;
+  display:flex; align-items:center; gap:.75rem; margin:.5rem 0 .5rem;
   padding:.5rem .75rem; border-radius:12px; background:rgba(0,0,0,.25);
   border:1px solid rgba(255,255,255,.08);
 }
@@ -93,7 +82,50 @@ body{
 }
 .now-playing .np-text{font-weight:600}
 
-/* ---------- Featured ---------- */
+/* Custom Player (no native controls) */
+.custom-player{
+  display:flex; align-items:center; gap:.9rem; margin-top:.35rem; justify-content:center;
+}
+.cp-btn{
+  width:54px; height:54px; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(255,255,255,.08); position:relative; transition:transform .08s ease;
+}
+.cp-btn:hover{transform:translateY(-1px)}
+.cp-btn::before{
+  content:""; position:absolute; inset:0; margin:auto;
+  width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-left:16px solid #fff;
+  transform:translateX(3px);
+}
+.cp-btn.is-pause::before{
+  width:14px; height:14px; border:none; background:
+    linear-gradient(to right,#fff 0 40%,transparent 40% 60%,#fff 60% 100%);
+}
+
+/* Mini-EQ visualizer */
+.cp-visual{display:flex; align-items:flex-end; gap:4px; height:28px; width:64px}
+.cp-visual span{
+  width:6px; height:8px; background:#fff; opacity:.9; border-radius:2px; transform-origin:50% 100%;
+  transition:height .08s linear;
+}
+.custom-player:not(.is-playing) .cp-visual span{opacity:.3}
+
+/* Volume */
+.cp-vol input[type="range"]{
+  width:120px; appearance:none; background:transparent;
+}
+.cp-vol input::-webkit-slider-runnable-track{
+  height:4px; background:rgba(255,255,255,.25); border-radius:999px;
+}
+.cp-vol input::-webkit-slider-thumb{
+  appearance:none; margin-top:-6px; width:16px; height:16px; border-radius:50%;
+  background:linear-gradient(135deg, var(--gold), #f9d976); border:none;
+}
+.cp-open{border-color:var(--card-brd)}
+
+/* Helper */
+.note{color:var(--muted); font-size:.9rem; text-align:center; margin-top:.5rem}
+
+/* Featured */
 .featured{padding:2rem 1rem}
 .featured-card{
   display:grid; grid-template-columns:120px 1fr; gap:1rem; align-items:center;
@@ -102,14 +134,11 @@ body{
 }
 .featured-card img{width:120px; height:120px; object-fit:cover; border-radius:12px}
 .featured-body .chips{display:flex; gap:.5rem; margin-bottom:.25rem}
-.chip{
-  display:inline-flex; padding:.25rem .55rem; font-size:.8rem;
-  background:rgba(255,255,255,.1); border:1px solid var(--card-brd); border-radius:999px;
-}
+.chip{display:inline-flex; padding:.25rem .55rem; font-size:.8rem; background:rgba(255,255,255,.1); border:1px solid var(--card-brd); border-radius:999px}
 .featured-body h2{margin:.25rem 0 .25rem}
 .featured-body p{margin:0 0 .75rem; color:var(--muted)}
 
-/* ---------- Footer ---------- */
+/* Footer */
 .site-footer{
   border-top:1px solid rgba(255,255,255,0.08);
   background:#000; padding:18px; text-align:center; color:var(--muted)
@@ -123,7 +152,28 @@ body{
 }
 .store-badge:hover{background:rgba(255,255,255,.12)}
 
-/* ---------- Responsive Tweaks ---------- */
+/* Collapsible recent list */
+details.songs{max-width:720px; margin:.75rem auto 0}
+details.songs summary{
+  list-style:none; cursor:pointer; user-select:none;
+  display:flex; align-items:center; justify-content:space-between; gap:.5rem;
+  padding:.65rem .9rem; border-radius:12px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+}
+details.songs summary::-webkit-details-marker{display:none}
+details.songs[open] summary{background:rgba(255,255,255,.08)}
+ul.song-list{list-style:none; margin:.75rem 0 0; padding:0}
+.song-item{display:flex; align-items:center; gap:.65rem; padding:.5rem .25rem}
+.song-art{
+  width:36px; height:36px; border-radius:8px; object-fit:cover;
+  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
+}
+.song-text{display:flex; flex-direction:column; line-height:1.2}
+.song-title{font-weight:600}
+.song-artist{color:var(--muted); font-size:.92rem}
+.ad-break{text-align:center; color:var(--muted); font-size:.85rem; opacity:.9; padding:.25rem 0}
+
+/* Responsive */
 @media (max-width:680px){
   .featured-card{grid-template-columns:1fr}
   .featured-card img{width:100%; height:220px}
