@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Live streaming from one of the nation’s oldest Black-owned public radio stations." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=9" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=11" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body>
 <header class="site-header">
@@ -21,15 +21,14 @@
 </header>
 
 <main>
-  <!-- Keep the same visual language as home -->
-  <section class="listen-hero hero">
+  <section class="hero hero-compact">
     <div class="hero-inner">
       <h1>Listen Live</h1>
-      <p>Press play. If playback doesn’t start, tap the Play button below.</p>
+      <p>Tap play to start the stream.</p>
     </div>
   </section>
 
-  <section class="player-wrap" aria-label="KBBG 88.1 Live Stream">
+  <section class="card center narrow" aria-label="KBBG 88.1 Live Stream">
     <audio id="pagePlayer" controls preload="none">
       <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
       <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
@@ -43,7 +42,7 @@
     <p class="note">Autoplay is blocked by browsers—tap Play to start.</p>
   </section>
 
-  <section class="app-cta">
+  <section class="card center narrow">
     <h2 class="section-title">Prefer the app?</h2>
     <div class="store-row">
       <a class="store-badge" target="_blank" rel="noopener"
@@ -62,7 +61,6 @@
   const pp = () => document.getElementById('pagePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // Now Playing (reuse)
   async function fetchNowPlaying(elId){
     try{
       const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -74,11 +72,9 @@
       const art = t?.artwork || '';
       const el = document.getElementById(elId);
       if(!el) return;
-      if(title || artist){
-        el.innerHTML = (art ? `<img src="${art}" alt="" />` : '') + `${artist ? artist+' — ' : ''}${title}`;
-      } else {
-        el.textContent = '';
-      }
+      el.innerHTML = (title || artist)
+        ? `${art ? `<img src="${art}" alt="" />` : ''}${artist ? artist+' — ' : ''}${title}`
+        : '';
     }catch(e){}
   }
   fetchNowPlaying('np-page');
@@ -86,3 +82,4 @@
 </script>
 </body>
 </html>
+

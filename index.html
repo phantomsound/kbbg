@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KBBG FM 88.1 — Home</title>
-  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet." />
+  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations in Waterloo, Iowa." />
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=9" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=11" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body>
 <header class="site-header">
@@ -22,94 +22,52 @@
 
 <main>
   <!-- Hero -->
-  <section class="hero hero-image">
+  <section class="hero">
     <div class="hero-inner">
       <h1>Stream KBBG FM 88.1</h1>
-      <p>Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet.</p>
-      <a class="btn btn-gold btn-lg" href="listen.html">Open Player Page</a>
+      <p>Music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations.</p>
+      <div class="cta-row">
+        <a class="btn btn-gold btn-lg" href="listen.html">Open Full Player</a>
+      </div>
     </div>
   </section>
 
-  <!-- Embedded player -->
-  <section class="onair" aria-label="KBBG 88.1 Live Player">
-    <div class="onair-box">
-      <h2 class="section-title">On Air</h2>
-      <audio id="homePlayer" controls preload="none">
-        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
-        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
-        Your browser does not support the audio element.
-      </audio>
-      <div id="np-home" class="now-playing" aria-live="polite"></div>
-      <div class="player-actions">
-        <button class="btn btn-gold" onclick="homeP().play()">Play</button>
-        <button class="btn" onclick="homeP().pause()">Pause</button>
-      </div>
-      <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
+  <!-- Embedded player (simple) -->
+  <section class="card center narrow" aria-label="KBBG 88.1 Live Player">
+    <h2 class="section-title">On Air</h2>
+    <audio id="homePlayer" controls preload="none">
+      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
+      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
+      Your browser does not support the audio element.
+    </audio>
+    <div id="np-home" class="now-playing" aria-live="polite"></div>
+    <div class="player-actions">
+      <button class="btn btn-gold" onclick="hp().play()">Play</button>
+      <button class="btn" onclick="hp().pause()">Pause</button>
     </div>
+    <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
   </section>
 
-  <!-- Featured (with fallback) -->
-  <section class="featured">
-    <article class="featured-card">
-      <img src="assets/KBBGFM88One400x400.png?v=9"
-           alt="KBBG studio"
-           onerror="this.onerror=null;this.src='assets/placeholder-400x400.png';" />
-      <div class="featured-body">
-        <div class="chips">
-          <span class="chip">Music</span>
-          <span class="chip">Community</span>
-        </div>
-        <h2>Live from Waterloo</h2>
-        <p>Local voices, culture, and talk shows—24/7 on KBBG.</p>
-        <a class="btn btn-gold" href="listen.html">Play the Stream</a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Latest (simple, no dates) -->
-  <section class="latest">
-    <h2 class="section-title">Latest</h2>
-    <div class="latest-list">
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=201" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Radio Schedule</span></div>
-          <h3>Upcoming Radio Schedule</h3>
-        </div>
-      </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=202" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Culture</span></div>
-          <h3>Community Spotlight</h3>
-        </div>
-      </a>
-      <a class="latest-item" href="#">
-        <img src="https://picsum.photos/480/320?random=203" alt="">
-        <div class="latest-meta">
-          <div class="chips"><span class="chip">Music</span></div>
-          <h3>Weekend Mix: Local DJs</h3>
-        </div>
-      </a>
+  <!-- Minimal app links -->
+  <section class="card center narrow">
+    <h2 class="section-title">Get the App</h2>
+    <div class="store-row">
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+      <a class="store-badge" target="_blank" rel="noopener"
+         href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a></p>
-  <div class="store-row">
-    <a class="store-badge" target="_blank" rel="noopener"
-       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
-    <a class="store-badge" target="_blank" rel="noopener"
-       href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
-  </div>
 </footer>
 
 <script>
-  const homeP = () => document.getElementById('homePlayer');
+  const hp = () => document.getElementById('homePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // Now Playing (shared function)
   async function fetchNowPlaying(elId){
     try{
       const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
@@ -121,11 +79,9 @@
       const art = t?.artwork || '';
       const el = document.getElementById(elId);
       if(!el) return;
-      if(title || artist){
-        el.innerHTML = (art ? `<img src="${art}" alt="" />` : '') + `${artist ? artist+' — ' : ''}${title}`;
-      } else {
-        el.textContent = '';
-      }
+      el.innerHTML = (title || artist)
+        ? `${art ? `<img src="${art}" alt="" />` : ''}${artist ? artist+' — ' : ''}${title}`
+        : '';
     }catch(e){}
   }
   fetchNowPlaying('np-home');
