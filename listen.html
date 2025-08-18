@@ -9,10 +9,9 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
 </head>
 <body class="listen-page">
-
 <header class="site-header">
   <a class="logo" href="./">KBBG 88.1</a>
   <nav class="nav">
@@ -21,17 +20,30 @@
   </nav>
 </header>
 
-<main class="listen-main">
-  <section class="player-only">
-    <h1 class="page-title">KBBG FM 88.1 — Live Stream</h1>
-    <div class="player-box">
-      <div id="np-listen" class="now-playing" aria-live="polite"></div>
-      <audio id="livePlayer" controls preload="none">
+<main>
+  <!-- Full-bleed gradient like home -->
+  <section class="onair onair--solo" aria-label="KBBG 88.1 Live Player">
+    <div class="onair-box">
+      <h1 class="section-title">Listen Live</h1>
+
+      <!-- Now Playing (art + text) -->
+      <div id="np-listen" class="now-playing" aria-live="polite">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Player (same control look as home) -->
+      <audio id="livePlayer" controls preload="none" class="player-audio">
         <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
         Your browser does not support the audio element.
       </audio>
-      <p class="note">Press Play to start the stream.</p>
+
+      <div class="player-actions">
+        <button class="btn btn-gold" onclick="p().play()">Play</button>
+        <button class="btn" onclick="p().pause()">Pause</button>
+      </div>
+
+      <p class="note">Tip: browsers block autoplay — tap Play to start.</p>
     </div>
   </section>
 </main>
@@ -47,6 +59,7 @@
 </footer>
 
 <script>
+  const p = () => document.getElementById('livePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
   async function fetchNowPlaying(elId){
@@ -62,7 +75,7 @@
       if(!el) return;
       if(title || artist){
         el.innerHTML = `
-          ${art ? `<img src="${art}" alt="Artwork" class="np-art" />` : ''}
+          ${art ? `<img src="${art}" alt="" class="np-art" />` : ''}
           <span class="np-text">${artist ? artist + ' — ' : ''}${title}</span>
         `;
       } else {
