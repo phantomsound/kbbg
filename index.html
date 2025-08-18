@@ -4,12 +4,41 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KBBG FM 88.1 — Home</title>
-  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations in Waterloo, Iowa." />
+  <meta name="description" content="Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet." />
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=20" />
-  <link rel="stylesheet" href="styles.css?v=20" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg" />
+  <link rel="stylesheet" href="styles.css?v=8" />
+  <style>
+    /* Small additions for the collapsible list + compact song items */
+    details.songs { max-width: 720px; margin: 0.75rem auto 0; }
+    details.songs summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: .5rem; padding: .65rem .9rem; border-radius: 12px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    }
+    details.songs summary::-webkit-details-marker { display: none; }
+    details.songs[open] summary { background: rgba(255,255,255,.08); }
+
+    ul.song-list { list-style: none; margin: .75rem 0 0; padding: 0; }
+    .song-item { display: flex; align-items: center; gap: .65rem; padding: .5rem .25rem; }
+    .song-art {
+      width: 36px; height: 36px; border-radius: 8px; object-fit: cover;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .song-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .song-title { font-weight: 600; }
+    .song-artist { color: #bdbdbd; font-size: .92rem; }
+    .ad-break {
+      text-align: center; color: #bdbdbd; font-size: .85rem;
+      opacity: .9; padding: .25rem 0;
+    }
+  </style>
 </head>
 <body>
 <header class="site-header">
@@ -21,196 +50,227 @@
 </header>
 
 <main>
-  <!-- Hero -->
-  <section class="hero">
+  <!-- Hero: short intro + CTA -->
+  <section class="hero hero-image">
     <div class="hero-inner">
       <h1>Stream KBBG FM 88.1</h1>
-      <p>Music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations.</p>
-      <div class="cta-row">
-        <a class="btn btn-gold btn-lg" href="listen.html">Open Full Player</a>
-      </div>
+      <p>Stream music, culture, and community-focused talk from one of the nation’s oldest Black-owned public radio stations. Stay connected to Waterloo, Iowa—anytime, anywhere—right from your phone or tablet.</p>
+      <a class="btn btn-gold btn-lg" href="listen.html">Open Player Page</a>
     </div>
   </section>
 
-  <!-- Minimal Live Player -->
-  <section class="card center narrow" aria-label="KBBG 88.1 Live Player">
-    <!-- Hidden native audio -->
-    <audio id="homeAudio" preload="metadata">
-      <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
-      <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
-    </audio>
+  <!-- On Air: modern player card (same look as listen.html) -->
+  <section class="onair" aria-label="KBBG 88.1 Live Player">
+    <div class="onair-box">
+      <h2 class="section-title">On Air</h2>
 
-    <div class="mini-player">
-      <button id="homePlay" class="round-play" aria-label="Play/Pause">▶</button>
-      <div class="eq" id="homeEq" aria-hidden="true">
-        <span></span><span></span><span></span>
+      <!-- Now Playing -->
+      <div id="np-home" class="now-playing" aria-live="polite"></div>
+
+      <!-- Player -->
+      <audio id="homePlayer" class="player-audio" controls preload="none">
+        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+        Your browser does not support the audio element.
+      </audio>
+
+      <div class="player-actions">
+        <button class="btn btn-gold" onclick="homeP().play()">Play</button>
+        <button class="btn" onclick="homeP().pause()">Pause</button>
+        <a class="btn" href="listen.html" title="Open full player page">Open Full Player</a>
       </div>
-      <div class="np-wrap">
-        <div class="np-label">Now Playing</div>
-        <div id="np-home" class="now-playing" aria-live="polite"></div>
-      </div>
+      <p class="note">Tip: browsers block autoplay — tap Play to start.</p>
+
+      <!-- Collapsible Last 5 Songs (ads excluded, ad breaks marked) -->
+      <details class="songs" id="last5" aria-labelledby="last5-summary">
+        <summary id="last5-summary">
+          <span>Last 5 Songs</span>
+          <span aria-hidden="true">▾</span>
+        </summary>
+        <ul id="recent-list" class="song-list"></ul>
+      </details>
     </div>
-
-    <!-- Last 5 Songs (collapsed by default) -->
-    <details class="history-details">
-      <summary class="history-summary">Last 5 Songs</summary>
-      <ul id="history5" class="history-list"></ul>
-    </details>
   </section>
 
-  <!-- Apps -->
-  <section class="card center narrow">
-    <h2 class="section-title">Get the App</h2>
-    <div class="store-row">
-      <a class="store-badge" target="_blank" rel="noopener"
-         href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
-      <a class="store-badge" target="_blank" rel="noopener"
-         href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
+  <!-- Featured (kept simple + consistent) -->
+  <section class="featured">
+    <article class="featured-card">
+      <img src="assets/KBBGFM88One400x400.png" alt="KBBG studio" />
+      <div class="featured-body">
+        <div class="chips">
+          <span class="chip">Music</span>
+          <span class="chip">Community</span>
+        </div>
+        <h2>Live from Waterloo</h2>
+        <p>Local voices, culture, and talk shows — 24/7 on KBBG.</p>
+        <a class="btn btn-gold" href="listen.html">Play the Stream</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Latest (placeholders; you can wire posts later) -->
+  <section class="latest">
+    <h2 class="section-title">Latest</h2>
+    <div class="latest-list">
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/480/320?random=201" alt="">
+        <div class="latest-meta">
+          <div class="chips"><span class="chip">Radio Schedule</span></div>
+          <h3>Upcoming Radio Schedule</h3>
+        </div>
+      </a>
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/480/320?random=202" alt="">
+        <div class="latest-meta">
+          <div class="chips"><span class="chip">Culture</span></div>
+          <h3>Community Spotlight</h3>
+        </div>
+      </a>
+      <a class="latest-item" href="#">
+        <img src="https://picsum.photos/480/320?random=203" alt="">
+        <div class="latest-meta">
+          <div class="chips"><span class="chip">Music</span></div>
+          <h3>Weekend Mix: Local DJs</h3>
+        </div>
+      </a>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a></p>
+  <div class="store-row">
+    <a class="store-badge" target="_blank" rel="noopener"
+       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+    <a class="store-badge" target="_blank" rel="noopener"
+       href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
+  </div>
 </footer>
 
 <script>
+  const homeP = ()=>document.getElementById('homePlayer');
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // -------- Minimal Live Player (Home) --------
-  const ha = document.getElementById('homeAudio');
-  const playBtn = document.getElementById('homePlay');
-  const eq = document.getElementById('homeEq');
-
-  playBtn.addEventListener('click', async () => {
-    try{
-      if (ha.paused) {
-        await ha.play();
-        playBtn.textContent = '⏸';
-        eq.classList.add('is-playing');
-      } else {
-        ha.pause();
-        playBtn.textContent = '▶';
-        eq.classList.remove('is-playing');
-      }
-    }catch(e){}
-  });
-  ha.addEventListener('ended', ()=>{ playBtn.textContent='▶'; eq.classList.remove('is-playing'); });
-
-  // -------- Now Playing + History Utilities --------
-  const CURRENT_URL = 'https://public.radio.co/api/v2/se50df870e/track/current';
-  const HISTORY_URL = 'https://public.radio.co/api/v2/se50df870e/track/history';
+  const STATION = 'se50df870e';
+  const CURRENT_URL = `https://public.radio.co/api/v2/${STATION}/track/current`;
+  const RECENT_URL  = `https://public.radio.co/api/v2/${STATION}/track/recent?limit=20`;
 
   function isAd(item){
     const t = (item?.title || '').toLowerCase();
     const a = (item?.artist || '').toLowerCase();
-    // Heuristics for ad/commercial/PSA/sweeper/station IDs
-    return !!(
-      item?.is_commercial === true ||
-      /(^|\b)(ad|advert|advertisement|commercial|psa|sweeper|station id|promo)(\b|:)/i.test(item?.title || '') ||
-      /(^|\b)(ad|advert|commercial|psa|sweeper|station id|promo)(\b|:)/i.test(item?.artist || '') ||
-      (!t && !a) // sometimes ads have empty artist/title
-    );
+    const type = (item?.cue_type || '').toLowerCase();
+    // Heuristics: skip ads/jingles/station ids
+    return type.includes('advert')
+        || /(^|\s)(ad|advert|advertisement|commercial)(\s|$)/.test(t)
+        || /(sweep|jingle|station id|stn id)/.test(t)
+        || /(advert|commercial)/.test(a);
   }
-  function formatNP(item){
-    const title = item?.title || '';
-    const artist = item?.artist || '';
-    const art = item?.artwork || '';
-    const ad = isAd(item);
-    if (ad) {
-      const label = `<strong class="ad-pill">AD</strong>`;
-      return `${art ? `<img src="${art}" alt="" />` : ''}${label} ${title || 'Advertisement'}`;
+
+  function renderNowPlaying(elId, payload){
+    const el = document.getElementById(elId);
+    if(!el) return;
+    const t = payload?.data;
+    const title = t?.title || '';
+    const artist = t?.artist || '';
+    const art = t?.artwork || '';
+    if(title || artist){
+      el.innerHTML = `
+        ${art ? `<img src="${art}" alt="" class="np-art" />` : ''}
+        <span class="np-text">${artist ? artist + ' — ' : ''}${title}</span>
+      `;
+    } else {
+      el.textContent = '';
     }
-    return `${art ? `<img src="${art}" alt="" />` : ''}${artist ? `<strong>${artist}</strong> — ` : ''}${title}`;
-  }
-  function relTime(iso){
-    const d = iso ? new Date(iso) : null;
-    if(!d || isNaN(d)) return '';
-    const diff = (Date.now() - d.getTime())/1000; // seconds
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return Math.floor(diff/60)+'m ago';
-    if (diff < 86400) return Math.floor(diff/3600)+'h ago';
-    return d.toLocaleString();
   }
 
-  async function fetchNowPlaying(elId){
+  async function fetchNowPlaying(){
     try{
-      const res = await fetch(CURRENT_URL, {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      const data = await res.json();
-      const t = data?.data || {};
-      const el = document.getElementById(elId);
-      if(!el) return;
-      el.innerHTML = formatNP(t);
-    }catch(e){}
+      const r = await fetch(CURRENT_URL, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      renderNowPlaying('np-home', data);
+    }catch(e){ /*silent*/ }
   }
 
-  // Build a list of last N songs (exclude ads) and insert ad-break markers
-  async function renderHistorySongs(elId, songLimit){
-    const list = document.getElementById(elId);
-    if(!list) return;
+  async function fetchRecent(){
+    const listEl = document.getElementById('recent-list');
+    if(!listEl) return;
+    listEl.innerHTML = '';
     try{
-      const res = await fetch(HISTORY_URL, {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      const json = await res.json();
-      const raw = Array.isArray(json?.data) ? json.data : [];
+      const r = await fetch(RECENT_URL, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      const arr = Array.isArray(data?.data) ? data.data : [];
 
-      // Walk through history top → bottom adding:
-      // - song items (non-ads) up to songLimit
-      // - ad break markers, but DO NOT count ads towards the limit
-      let out = [];
-      let collectedSongs = 0;
-      let adRun = 0;
+      let songs = [];
+      let pendingAdBreak = false;
 
-      for (const item of raw) {
-        const ad = isAd(item);
-        if (ad) {
-          adRun += 1;
+      for(const item of arr){
+        if(isAd(item)){
+          // mark that an ad break occurred; don't add to songs
+          pendingAdBreak = true;
           continue;
         }
-        // we hit a song; if there was an ad run before it, add marker
-        if (adRun > 0) {
-          out.push({type:'adbreak', count: adRun});
-          adRun = 0;
+        // Only push song items; insert ad-break marker if needed
+        if(songs.length < 5){
+          if(pendingAdBreak && songs.length>0){
+            songs.push({ _adBreak: true });
+          }
+          pendingAdBreak = false;
+          songs.push({
+            title: item.title || '',
+            artist: item.artist || '',
+            art: item.artwork || ''
+          });
+        } else {
+          break;
         }
-        out.push({type:'song', item});
-        collectedSongs += 1;
-        if (collectedSongs >= songLimit) break;
-      }
-      // if history ends with an ad run (rare), append marker at the end
-      if (adRun > 0 && collectedSongs>0) {
-        out.push({type:'adbreak', count: adRun});
       }
 
-      list.innerHTML = out.map(entry=>{
-        if (entry.type === 'adbreak') {
-          const n = entry.count;
-          return `<li class="history-row adbreak"><div class="adline">Ad Break (${n} ad${n>1?'s':''})</div></li>`;
-        } else {
-          const it = entry.item;
-          const art = it?.artwork || '';
-          const title = it?.title || '';
-          const artist = it?.artist || '';
-          const when = relTime(it?.played_at || it?.start_time);
-          return `<li class="history-row">
-            ${art ? `<img src="${art}" alt="" />` : `<div class="art ph"></div>`}
-            <div class="meta">
-              <div class="t">${artist ? `<strong>${artist}</strong> — ` : ''}${title}</div>
-              <div class="s">${when}</div>
-            </div>
-          </li>`;
+      // Render
+      for(const s of songs){
+        if(s._adBreak){
+          const li = document.createElement('li');
+          li.className = 'ad-break';
+          li.textContent = '— AD BREAK —';
+          listEl.appendChild(li);
+          continue;
         }
-      }).join('');
+        const li = document.createElement('li');
+        li.className = 'song-item';
+        const art = s.art || 'assets/KBBGFM88One400x400.png';
+        li.innerHTML = `
+          <img class="song-art" src="${art}" alt="">
+          <div class="song-text">
+            <span class="song-title">${s.title}</span>
+            <span class="song-artist">${s.artist}</span>
+          </div>
+        `;
+        listEl.appendChild(li);
+      }
+
+      // If nothing rendered (e.g., only ads), show a friendly note
+      if(!listEl.children.length){
+        const li = document.createElement('li');
+        li.className = 'ad-break';
+        li.textContent = 'No recent songs available.';
+        listEl.appendChild(li);
+      }
+
     }catch(e){
-      list.innerHTML = '<li class="history-empty">No recent tracks available.</li>';
+      const li = document.createElement('li');
+      li.className = 'ad-break';
+      li.textContent = 'Unable to load recent songs right now.';
+      listEl.appendChild(li);
     }
   }
 
-  // Init
-  fetchNowPlaying('np-home');
-  renderHistorySongs('history5', 5);
-  setInterval(()=>fetchNowPlaying('np-home'), 20000);
-  setInterval(()=>renderHistorySongs('history5', 5), 60000);
+  // Initial loads + refresh intervals
+  fetchNowPlaying();
+  fetchRecent();
+  setInterval(fetchNowPlaying, 20000);
+  // Refresh recent less frequently
+  setInterval(fetchRecent, 60000);
 </script>
 </body>
 </html>
