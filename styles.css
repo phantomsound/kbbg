@@ -212,11 +212,30 @@ body.theme-gradient{
 }
 .hub-social{
   display:inline-flex; align-items:center; justify-content:center;
-  width:36px; height:36px; border-radius:50%;
+  min-width:36px; height:36px; border-radius:999px; padding:0 10px;
   text-decoration:none; color:#fff; border:1px solid var(--surface-2);
   background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  font-weight:700; letter-spacing:.2px;
 }
-.hub-categories{ max-width:980px; margin:8px auto 6px; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.hub-social--ig:hover{ box-shadow:0 0 0 2px rgba(225,48,108,.25) inset; }
+.hub-social--fb:hover{ box-shadow:0 0 0 2px rgba(24,119,242,.25) inset; }
+.hub-social--x:hover{  box-shadow:0 0 0 2px rgba(255,255,255,.2) inset; }
+
+/* Two-column layout (Hub) */
+.hub-layout{
+  max-width:1100px; margin:10px auto 60px; padding:0 16px;
+  display:grid; grid-template-columns: 2fr 1fr; gap:18px; align-items:start;
+}
+.hub-main{ min-width:0; }
+.hub-aside{
+  position:sticky; top:78px; /* stays visible as you scroll */
+}
+.hub-aside-title{
+  margin:0 0 10px; font-size:20px; letter-spacing:.4px;
+}
+
+/* Hub grid/cards */
+.hub-categories{ max-width:100%; margin:8px 0 6px; display:flex; gap:8px; flex-wrap:wrap; }
 .hub-cat{
   border:1px solid var(--surface-2); border-radius:999px; padding:8px 12px;
   background:transparent; color:#fff; cursor:pointer;
@@ -224,7 +243,6 @@ body.theme-gradient{
 .hub-cat.is-active{ border-color: var(--gold); box-shadow: 0 0 0 2px rgba(244,197,66,.15) inset; }
 
 .hub-grid{
-  max-width: 1100px; margin: 10px auto 60px; padding: 0 16px;
   display: grid; gap: 14px;
   grid-template-columns: repeat(3, 1fr);
 }
@@ -243,20 +261,16 @@ body.theme-gradient{
 .hub-card-title{ margin:24px 0 6px; font-size:20px; line-height:1.25; }
 .hub-card-blurb{ margin:0; color:#cfd0da; font-size:14px; }
 
-@media (max-width: 900px){
+@media (max-width: 1000px){
+  .hub-layout{ grid-template-columns: 1fr; }
+  .hub-aside{ position:static; }
   .hub-grid{ grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px){
   .hub-grid{ grid-template-columns: 1fr; }
 }
 
-/* ===== KBBG Timeline ===== */
-.hub-timeline{
-  max-width:980px; margin:16px auto 24px; padding:0 16px;
-}
-.hub-timeline-title{
-  margin:0 0 8px; font-size:22px; letter-spacing:.4px;
-}
+/* ===== Timeline styles (sidebar block) ===== */
 .timeline-list{
   margin:0; padding:0; list-style:none; position:relative;
 }

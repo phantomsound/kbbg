@@ -12,7 +12,7 @@
   <meta property="og:description" content="Featured stories, music, and community updates from KBBG FM 88.1." />
   <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
 
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="styles.css?v=18" />
 </head>
 <body class="theme-gradient">
 <header class="site-header">
@@ -25,11 +25,10 @@
 </header>
 
 <main>
-
   <!-- Intro -->
   <section class="hero hero--compact">
     <div class="hero-inner">
-      <h1>KBB Hub</h1>
+      <h1>KBBG Hub</h1>
       <p>Featured stories, music, and community from KBBG FM 88.1.</p>
     </div>
   </section>
@@ -73,154 +72,153 @@
     </div>
   </section>
 
-  <!-- Socials strip -->
+  <!-- Socials strip (Hub-only) -->
   <section class="hub-socials" aria-label="Follow KBBG">
     <div class="hub-socials-inner">
-      <a class="hub-social" href="#" aria-label="Share via Email">✉️</a>
-      <a class="hub-social" href="#" aria-label="Facebook">f</a>
-      <a class="hub-social" href="#" aria-label="X / Twitter">𝕏</a>
-      <a class="hub-social" href="#" aria-label="Pinterest">P</a>
-      <a class="hub-social" href="#" aria-label="LinkedIn">in</a>
-      <a class="hub-social" href="#" aria-label="WhatsApp">WA</a>
+      <a class="hub-social hub-social--ig" href="https://www.instagram.com/kbbgfm" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+      <a class="hub-social hub-social--fb" href="https://www.facebook.com/KBBGFM88.1/" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+      <a class="hub-social hub-social--x"  href="https://x.com/kbbg88" target="_blank" rel="noopener" aria-label="X / Twitter">𝕏</a>
     </div>
   </section>
 
-  <!-- KBBG History Timeline -->
-  <section class="hub-timeline" aria-labelledby="hub-timeline-h">
-    <h2 id="hub-timeline-h" class="hub-timeline-title">KBBG History Timeline</h2>
-    <ol class="timeline-list">
-      <li class="tl-item">
-        <div class="tl-date">Mar 1977</div>
-        <div class="tl-content">
-          <div class="tl-title">Foundation of ACB, Inc. (KBBG)</div>
-          <p>Jimmie Porter forms Afro-American Community Broadcasting, Inc. to build a station for the Black community.</p>
-          <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
-        </div>
-      </li>
+  <!-- Hub layout: main grid + right sidebar timeline -->
+  <section class="hub-layout">
+    <!-- Main content -->
+    <div class="hub-main">
+      <nav class="hub-categories" aria-label="Content Categories">
+        <button class="hub-cat is-active" data-cat="recommended">Recommended</button>
+        <button class="hub-cat" data-cat="music">Music</button>
+        <button class="hub-cat" data-cat="community">Community</button>
+        <button class="hub-cat" data-cat="talk">Talk & Interviews</button>
+      </nav>
 
-      <li class="tl-item">
-        <div class="tl-date">Jul 26, 1978</div>
-        <div class="tl-content">
-          <div class="tl-title">First Equipment Test (10 watts)</div>
-          <p>KBBG-FM 88.1 conducts its first on-air equipment test at 10 watts.</p>
-          <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
-        </div>
-      </li>
+      <section class="hub-grid" id="hub-grid" aria-live="polite">
+        <a class="hub-card" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">
+          <span class="hub-tag">Recommended</span>
+          <h3 class="hub-card-title">KBBG Oral History (UNI)</h3>
+          <p class="hub-card-blurb">Explore the African American Voices Museum collection on KBBG.</p>
+        </a>
 
-      <li class="tl-item">
-        <div class="tl-date">Dec 27, 1980</div>
-        <div class="tl-content">
-          <div class="tl-title">Power Upgrade (~10,000 watts)</div>
-          <p>Signal power increases to roughly 10 kW, vastly expanding coverage.</p>
-          <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
-          <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Context (Spark News)</a>
-        </div>
-      </li>
+        <a class="hub-card" href="https://aa-voices-museum.uni.edu/video_kbbg" target="_blank" rel="noopener">
+          <span class="hub-tag">Community</span>
+          <h3 class="hub-card-title">KBBG Video Archive</h3>
+          <p class="hub-card-blurb">Historic clips and moments from the station’s past.</p>
+        </a>
 
-      <li class="tl-item">
-        <div class="tl-date">2007</div>
-        <div class="tl-content">
-          <div class="tl-title">Jimmie Porter’s Legacy</div>
-          <p>Jimmie Porter, founder and longtime leader of KBBG, passes away.</p>
-          <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Source (Spark News)</a>
-        </div>
-      </li>
+        <a class="hub-card" href="https://www.youtube.com/watch?v=RmOxb-edD2s&t=1s&ab_channel=UNITV4IBNA" target="_blank" rel="noopener">
+          <span class="hub-tag">Talk</span>
+          <h3 class="hub-card-title">Inside KBBG — UNI TV Feature</h3>
+          <p class="hub-card-blurb">A look at the mission and people behind 88.1.</p>
+        </a>
 
-      <li class="tl-item">
-        <div class="tl-date">2012</div>
-        <div class="tl-content">
-          <div class="tl-title">UNI TV Feature</div>
-          <p>Electronic Media Production feature on KBBG highlights the station’s mission.</p>
-          <a class="tl-src" href="https://aa-voices-museum.uni.edu/video_kbbg" target="_blank" rel="noopener">Source (UNI video)</a>
-        </div>
-      </li>
+        <a class="hub-card" href="https://www.youtube.com/@KBBGOfficial" target="_blank" rel="noopener">
+          <span class="hub-tag">Music</span>
+          <h3 class="hub-card-title">KBBG Official YouTube</h3>
+          <p class="hub-card-blurb">Latest videos, promos, and community highlights.</p>
+        </a>
 
-      <li class="tl-item">
-        <div class="tl-date">2018</div>
-        <div class="tl-content">
-          <div class="tl-title">40 Years of Service</div>
-          <p>Coverage celebrating KBBG’s four decades of community broadcasting.</p>
-          <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Source (Spark News)</a>
-        </div>
-      </li>
+        <a class="hub-card" href="https://www.kcrg.com/content/news/Waterloo-radio-station-founded-to-serve-black-listeners-says-it-needs-help-558597421.html" target="_blank" rel="noopener">
+          <span class="hub-tag">Community</span>
+          <h3 class="hub-card-title">KCRG: A Station for Listeners</h3>
+          <p class="hub-card-blurb">Local coverage on KBBG’s legacy and support needs.</p>
+        </a>
 
-      <li class="tl-item">
-        <div class="tl-date">2019</div>
-        <div class="tl-content">
-          <div class="tl-title">Community Fundraising Push</div>
-          <p>Local report details efforts to support operations and equipment repairs.</p>
-          <a class="tl-src" href="https://www.kcrg.com/content/news/Waterloo-radio-station-founded-to-serve-black-listeners-says-it-needs-help-558597421.html" target="_blank" rel="noopener">Source (KCRG)</a>
-        </div>
-      </li>
-    </ol>
+        <a class="hub-card" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">
+          <span class="hub-tag">Featured</span>
+          <h3 class="hub-card-title">40 Years of KBBG</h3>
+          <p class="hub-card-blurb">A milestone celebration and look back at service.</p>
+        </a>
+
+        <a class="hub-card" href="https://www.kwwl.com/news/waterloo-radio-station-to-start-playing-music-from-bosnia/article_4491b940-4806-528f-b4ec-81cf65137883.html" target="_blank" rel="noopener">
+          <span class="hub-tag">Music</span>
+          <h3 class="hub-card-title">KWWL: A Global Sound in Waterloo</h3>
+          <p class="hub-card-blurb">Story on KBBG adding Bosnian music for neighbors.</p>
+        </a>
+
+        <a class="hub-card" href="https://scholarworks.uni.edu/cgi/viewcontent.cgi?article=4358&context=grp" target="_blank" rel="noopener">
+          <span class="hub-tag">Talk</span>
+          <h3 class="hub-card-title">UNI ScholarWorks: KBBG Paper (PDF)</h3>
+          <p class="hub-card-blurb">Academic perspective on KBBG’s role and impact.</p>
+        </a>
+
+        <a class="hub-card" href="kbbg-history.html">
+          <span class="hub-tag">Recommended</span>
+          <h3 class="hub-card-title">KBBG History Timeline (Coming Soon)</h3>
+          <p class="hub-card-blurb">We’re assembling a visual timeline of 88.1’s journey.</p>
+        </a>
+      </section>
+    </div>
+
+    <!-- Right Sidebar: KBBG History Timeline -->
+    <aside class="hub-aside" aria-labelledby="hub-timeline-h">
+      <h2 id="hub-timeline-h" class="hub-aside-title">KBBG History Timeline</h2>
+      <ol class="timeline-list">
+        <li class="tl-item">
+          <div class="tl-date">Mar 1977</div>
+          <div class="tl-content">
+            <div class="tl-title">Foundation of ACB, Inc. (KBBG)</div>
+            <p>Jimmie Porter forms Afro-American Community Broadcasting, Inc. to build a station for the Black community.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">Jul 26, 1978</div>
+          <div class="tl-content">
+            <div class="tl-title">First Equipment Test (10 watts)</div>
+            <p>KBBG-FM 88.1 conducts its first on-air equipment test at 10 watts.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">Dec 27, 1980</div>
+          <div class="tl-content">
+            <div class="tl-title">Power Upgrade (~10,000 watts)</div>
+            <p>Signal power increases to roughly 10 kW, vastly expanding coverage.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
+            <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Context (Spark News)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2007</div>
+          <div class="tl-content">
+            <div class="tl-title">Jimmie Porter’s Legacy</div>
+            <p>Jimmie Porter, founder and longtime leader of KBBG, passes away.</p>
+            <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Source (Spark News)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2012</div>
+          <div class="tl-content">
+            <div class="tl-title">UNI TV Feature</div>
+            <p>Electronic Media Production feature on KBBG highlights the station’s mission.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/video_kbbg" target="_blank" rel="noopener">Source (UNI video)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2018</div>
+          <div class="tl-content">
+            <div class="tl-title">40 Years of Service</div>
+            <p>Coverage celebrating KBBG’s four decades of community broadcasting.</p>
+            <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Source (Spark News)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2019</div>
+          <div class="tl-content">
+            <div class="tl-title">Community Fundraising Push</div>
+            <p>Local report details efforts to support operations and equipment repairs.</p>
+            <a class="tl-src" href="https://www.kcrg.com/content/news/Waterloo-radio-station-founded-to-serve-black-listeners-says-it-needs-help-558597421.html" target="_blank" rel="noopener">Source (KCRG)</a>
+          </div>
+        </li>
+      </ol>
+    </aside>
   </section>
-
-  <!-- Category chips -->
-  <nav class="hub-categories" aria-label="Content Categories">
-    <button class="hub-cat is-active" data-cat="recommended">Recommended</button>
-    <button class="hub-cat" data-cat="music">Music</button>
-    <button class="hub-cat" data-cat="community">Community</button>
-    <button class="hub-cat" data-cat="talk">Talk & Interviews</button>
-  </nav>
-
-  <!-- Feature grid (9 cards) -->
-  <section class="hub-grid" id="hub-grid" aria-live="polite">
-    <a class="hub-card" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">
-      <span class="hub-tag">Recommended</span>
-      <h3 class="hub-card-title">KBBG Oral History (UNI)</h3>
-      <p class="hub-card-blurb">Explore the African American Voices Museum collection on KBBG.</p>
-    </a>
-
-    <a class="hub-card" href="https://aa-voices-museum.uni.edu/video_kbbg" target="_blank" rel="noopener">
-      <span class="hub-tag">Community</span>
-      <h3 class="hub-card-title">KBBG Video Archive</h3>
-      <p class="hub-card-blurb">Historic clips and moments from the station’s past.</p>
-    </a>
-
-    <a class="hub-card" href="https://www.youtube.com/watch?v=RmOxb-edD2s&t=1s&ab_channel=UNITV4IBNA" target="_blank" rel="noopener">
-      <span class="hub-tag">Talk</span>
-      <h3 class="hub-card-title">Inside KBBG — UNI TV Feature</h3>
-      <p class="hub-card-blurb">A look at the mission and people behind 88.1.</p>
-    </a>
-
-    <a class="hub-card" href="https://www.youtube.com/@KBBGOfficial" target="_blank" rel="noopener">
-      <span class="hub-tag">Music</span>
-      <h3 class="hub-card-title">KBBG Official YouTube</h3>
-      <p class="hub-card-blurb">Latest videos, promos, and community highlights.</p>
-    </a>
-
-    <a class="hub-card" href="https://www.kcrg.com/content/news/Waterloo-radio-station-founded-to-serve-black-listeners-says-it-needs-help-558597421.html" target="_blank" rel="noopener">
-      <span class="hub-tag">Community</span>
-      <h3 class="hub-card-title">KCRG: A Station for Listeners</h3>
-      <p class="hub-card-blurb">Local coverage on KBBG’s legacy and support needs.</p>
-    </a>
-
-    <a class="hub-card" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">
-      <span class="hub-tag">Featured</span>
-      <h3 class="hub-card-title">40 Years of KBBG</h3>
-      <p class="hub-card-blurb">A milestone celebration and look back at service.</p>
-    </a>
-
-    <a class="hub-card" href="https://www.kwwl.com/news/waterloo-radio-station-to-start-playing-music-from-bosnia/article_4491b940-4806-528f-b4ec-81cf65137883.html" target="_blank" rel="noopener">
-      <span class="hub-tag">Music</span>
-      <h3 class="hub-card-title">KWWL: A Global Sound in Waterloo</h3>
-      <p class="hub-card-blurb">Story on KBBG adding Bosnian music for neighbors.</p>
-    </a>
-
-    <a class="hub-card" href="https://scholarworks.uni.edu/cgi/viewcontent.cgi?article=4358&context=grp" target="_blank" rel="noopener">
-      <span class="hub-tag">Talk</span>
-      <h3 class="hub-card-title">UNI ScholarWorks: KBBG Paper (PDF)</h3>
-      <p class="hub-card-blurb">Academic perspective on KBBG’s role and impact.</p>
-    </a>
-
-    <!-- Placeholder to keep 3×3; swap when you have a link -->
-    <a class="hub-card" href="kbbg-history.html">
-      <span class="hub-tag">Recommended</span>
-      <h3 class="hub-card-title">KBBG History Timeline (Coming Soon)</h3>
-      <p class="hub-card-blurb">We’re assembling a visual timeline of 88.1’s journey.</p>
-    </a>
-  </section>
-
 </main>
 
 <footer class="site-footer">
@@ -328,7 +326,7 @@
   fetchStatus();
   setInterval(fetchStatus, 20000);
 
-  // Category chip visual toggle (content is static for now)
+  // Category chip visual toggle (static content)
   document.querySelectorAll('.hub-cat').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       document.querySelectorAll('.hub-cat').forEach(b=>b.classList.remove('is-active'));
