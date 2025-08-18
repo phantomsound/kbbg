@@ -17,15 +17,13 @@ Simple, fast site for KBBG FM 88.1 hosted on GitHub Pages.
 - HLS fallback: `https://s5.radio.co/se50df870e/listen.m3u8`
 
 ## Now Playing & Recent
-- Current track: `https://public.radio.co/api/v2/se50df870e/track/current`
-- Recent history (for last 5 songs):  
-  `https://public.radio.co/api/v2/se50df870e/history`  
+- **Status (current + history):** `https://public.radio.co/stations/se50df870e/status`  
+  - We use this endpoint to populate “Now Playing” and **Last 5 Songs** (server history).  
   - Ads are filtered out (by keywords like “ad”, “advert”, “promo”, “sweeper”, “station id”, “psa”).
 
 ## Assets
 - Social preview: `/kbbg/assets/og-kbbg-1200x630.jpg`
-- Default artwork fallback: `/kbbg/assets/KBBGFM88One%20400x400.png`  
-  (Note the encoded space `%20` in the filename.)
+- Default artwork fallback (repo root): `/kbbg/KBBGFM88One400x400.png`
 
 ## Local Dev
 Open `index.html` in a browser, or use a tiny static server:

@@ -9,7 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=10" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body class="theme-gradient">
 <header class="site-header">
@@ -58,6 +58,8 @@
 </footer>
 
 <script>
+  const STATUS_URL = 'https://public.radio.co/stations/se50df870e/status';
+
   const liveAudio = document.getElementById('livePlayer');
   const playBtn   = document.getElementById('play-live');
   const npT       = document.getElementById('np-title-live');
@@ -87,15 +89,16 @@
   liveAudio.addEventListener('pause', ()=>setBtnPlaying(false));
   liveAudio.addEventListener('play',  ()=>setBtnPlaying(true));
 
-  async function fetchNowPlaying(){
+  async function fetchStatus(){
     try{
-      const r = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
+      const r = await fetch(STATUS_URL, {cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
       const j = await r.json();
-      const d = j?.data;
-      const title = (d?.title || '').trim();
-      const artist = (d?.artist || '').trim();
-      const art = (d?.artwork || '').trim();
+
+      const now = j?.current_track || j?.now_playing || j?.current || j;
+      const title  = (now?.title || now?.track?.title || '').trim();
+      const artist = (now?.artist || now?.track?.artist || '').trim();
+      const art    = (now?.artwork_url || now?.artwork || now?.image || '').trim();
 
       if(art){
         artImg.src = art;
@@ -103,11 +106,13 @@
       }
       npT.textContent = 'Now Playing';
       npTr.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
-    }catch(e){}
+    }catch(e){
+      console.warn(e);
+    }
   }
 
-  fetchNowPlaying();
-  setInterval(fetchNowPlaying, 20000);
+  fetchStatus();
+  setInterval(fetchStatus, 20000);
 </script>
 </body>
 </html>

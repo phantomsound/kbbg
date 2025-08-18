@@ -9,7 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=10" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body class="theme-gradient">
 <header class="site-header">
@@ -56,7 +56,7 @@
     </div>
   </section>
 
-  <!-- Last 5 songs -->
+  <!-- Last 5 songs (ads excluded) -->
   <section class="recent">
     <details id="recent-details" class="recent-details">
       <summary>
@@ -82,6 +82,8 @@
 
 <script>
   const $ = (s)=>document.querySelector(s);
+  const STATUS_URL = 'https://public.radio.co/stations/se50df870e/status';
+
   const homeAudio = $('#homePlayer');
   const playBtn = $('#play-home');
   const npTitle = $('#np-title-home');
@@ -112,35 +114,33 @@
   homeAudio.addEventListener('pause', ()=>setBtnPlaying(false));
   homeAudio.addEventListener('play',  ()=>setBtnPlaying(true));
 
-  async function fetchNowPlaying(){
+  // Ad filter
+  function looksLikeAd(t, a){
+    const s = (t + ' ' + a).toLowerCase();
+    return /\b(ad|ad[-\s]?break|advert|promo|sweeper|station\s?id|psa)\b/.test(s);
+  }
+
+  async function fetchStatus(){
     try{
-      const r = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
+      const r = await fetch(STATUS_URL, {cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
       const j = await r.json();
-      const d = j?.data;
-      const title = (d?.title || '').trim();
-      const artist = (d?.artist || '').trim();
-      const art = (d?.artwork || '').trim();
 
-      if(art) {
+      // Current
+      const now = j?.current_track || j?.now_playing || j?.current || j;
+      const title  = (now?.title || now?.track?.title || '').trim();
+      const artist = (now?.artist || now?.track?.artist || '').trim();
+      const art    = (now?.artwork_url || now?.artwork || now?.image || '').trim();
+
+      if(art){
         artImg.src = art;
         $('#artwrap-home').classList.add('has-art');
       }
       npTitle.textContent = 'Now Playing';
       npTrack.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
-    }catch(e){}
-  }
 
-  function looksLikeAd(t,a){
-    const s = (t + ' ' + a).toLowerCase();
-    return s.includes('ad ')||s.includes('advert')||s.includes('sweeper')||s.includes('promo')||s.includes('station id')||s.includes('psa');
-  }
-  async function fetchRecentFive(){
-    try{
-      const r = await fetch('https://public.radio.co/api/v2/se50df870e/history', {cache:'no-store'});
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const j = await r.json();
-      const items = Array.isArray(j?.data)? j.data : [];
+      // History -> recent 5 (ads excluded)
+      const items = Array.isArray(j?.history) ? j.history : [];
       const songs = [];
       for(const it of items){
         const t = (it?.track?.title || it?.title || '').trim();
@@ -148,8 +148,9 @@
         if(!t && !a) continue;
         if(looksLikeAd(t,a)) continue;
         songs.push({title:t, artist:a});
-        if(songs.length===5) break;
+        if(songs.length === 5) break;
       }
+
       recentList.innerHTML = songs.map(s => `
         <li class="recent-item">
           <div class="ri-meta">
@@ -157,18 +158,19 @@
             <div class="ri-artist">${s.artist || 'Unknown Artist'}</div>
           </div>
         </li>
-      `).join('') || `<li><div class="ri-title">No recent songs found</div></li>`;
-      recentList.setAttribute('aria-busy','false');
+      `).join('') || `<li class="recent-item"><div class="ri-meta"><div class="ri-title">No recent songs found</div></div></li>`;
+      recentList.setAttribute('aria-busy', 'false');
     }catch(e){
-      recentList.innerHTML = `<li><div class="ri-title">Could not load recent songs</div></li>`;
-      recentList.setAttribute('aria-busy','false');
+      console.warn(e);
+      if(recentList){
+        recentList.innerHTML = `<li class="recent-item"><div class="ri-meta"><div class="ri-title">Could not load recent songs</div></div></li>`;
+        recentList.setAttribute('aria-busy','false');
+      }
     }
   }
 
-  fetchNowPlaying();
-  fetchRecentFive();
-  setInterval(fetchNowPlaying,20000);
-  setInterval(fetchRecentFive,60000);
+  fetchStatus();
+  setInterval(fetchStatus, 20000); // refresh current + history together
 </script>
 </body>
 </html>

@@ -1,24 +1,22 @@
+
+---
+
+## `CHANGELOG.md`
+```markdown
 # Changelog
 
+## 2025-08-17 (late)
+- Switch “Now Playing” and “Last 5 Songs” to **Radio.co status endpoint**:
+  `https://public.radio.co/stations/se50df870e/status` (uses server history, not user playback).
+- Harden ad filtering (handles “ad break”, “station id”, etc.).
+- Standardize fallback artwork path on pages to `/kbbg/KBBGFM88One400x400.png`.
+- Add EQ animation CSS and wire it to play/pause state.
+
 ## 2025-08-17
-- Unified **modern player style** across `index.html` and `listen.html` (purple→black gradient, gold accents).
-- Replaced native audio controls with a **custom player UI** (consistent modern styling, gold buttons, “Now Playing” layout).
-- Added mini-EQ animation (Web Audio API with graceful fallback).
-- **Home**
-  - Removed “community/latest” grid.
-  - Retained Featured card.
-  - Added collapsible **“Last 5 Songs”** (ads excluded, loads immediately and auto-refreshes).
-  - “Open” button jumps to full player page.
-- **Listen**
-  - Updated header to match Home (logo + nav).
-  - Player-only layout (no recent tracks), styled same as Home.
-- **Assets**
-  - Updated image paths to repo-aware form and encoded filename space:
-    `/kbbg/assets/KBBGFM88One%20400x400.png`.
-- **Styles**
-  - Polish CSS (native `<details>` accordion styling, improved spacing/contrast).
-- **Docs**
-  - Updated README to reflect removals and unified player design.
+- Unified modern player style across Home and Listen.
+- Collapsible **Last 5 Songs** on Home (ads excluded).
+- Listen page player-only, matching Home styling.
+- README and styles updates for unified design.
 
 ## 2025-08-16
 - Fixed stray/awkward link on Home and improved hero/OG tags.
@@ -32,6 +30,3 @@
 
 ## 2025-08-07
 - Initial structure (`index.html`, `listen.html`, `styles.css`), GitHub Pages setup.
-
-## 2025-08-10
-- Initial GitHub Pages scaffold; base theme (purple, gold, black).
