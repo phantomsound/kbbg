@@ -1,41 +1,30 @@
-\# KBBG 88.1 FM Website
+# KBBG FM 88.1 — Community Radio Website
 
+A modernized website for **KBBG FM 88.1**, one of the nation’s oldest Black-owned public radio stations, based in Waterloo, Iowa.  
+This site makes it easy for listeners to stream live audio, see what’s playing, and connect with the community.
 
+---
 
-This repository hosts the official KBBG 88.1 FM website, deployed via \*\*GitHub Pages\*\* at:  
+## 🚀 Features
 
-🔗 https://phantomsound.github.io/kbbg/
+- **Live Audio Stream** — Listen to KBBG 88.1 directly in the browser.
+- **Now Playing Display** — Clear track info with artwork and “AD” flagging for ad breaks.
+- **Last 5 Songs History** — Collapsible list of the most recent tracks, excluding ads but notating breaks.
+- **Mobile-Friendly** — Works smoothly on phones, tablets, and desktops.
+- **App Store Links** — Direct links to the official **Google Play** and **iOS App Store** apps.
+- **Simple Navigation** — Two streamlined pages:
+  - `index.html` → Home with embedded player
+  - `listen.html` → Dedicated listening page
 
+---
 
+## 🎨 Design
 
-\## 📌 About
+- **Theme**: Purple-to-black gradient with gold accents  
+- **Typography**: Clean, system fonts for fast loading  
+- **Responsive Layout**: Scales well across devices  
 
-KBBG FM 88.1 is one of the nation’s oldest Black-owned public radio stations, serving Waterloo, Iowa with music, culture, and community-focused talk.
+---
 
-
-
-The site provides:
-
-\- \*\*Live audio streaming\*\* directly from the homepage and dedicated "Listen Live" page.
-
-\- \*\*Links to mobile apps\*\* for both Google Play and Apple App Store.
-
-
-
-\## 🛠 Local Development
-
-To edit and preview the site locally:
-
-
-
-1\. Clone the repo:
-
-&nbsp;  ```bash
-
-&nbsp;  git clone https://github.com/phantomsound/kbbg.git
-
-&nbsp;  cd kbbg
-
-
-
+## 📂 Structure
 
