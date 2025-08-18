@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Live streaming from one of the nation’s oldest Black-owned public radio stations." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=12" />
-  <link rel="stylesheet" href="styles.css?v=12" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=20" />
+  <link rel="stylesheet" href="styles.css?v=20" />
 </head>
 <body>
 <header class="site-header">
@@ -35,7 +35,7 @@
       <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
     </audio>
 
-    <!-- Custom controls -->
+    <!-- Full custom controls -->
     <div class="player">
       <button id="pagePlay" class="btn btn-gold player-btn" aria-label="Play/Pause">▶</button>
       <div class="progress" id="pageBar" role="progressbar" aria-label="Playback position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
@@ -46,6 +46,11 @@
 
     <div id="np-page" class="now-playing" aria-live="polite"></div>
     <p class="note">Autoplay is blocked by browsers—tap Play to start.</p>
+  </section>
+
+  <section class="card center narrow">
+    <h2 class="section-title">Recent Tracks</h2>
+    <ul id="history10" class="history-list"></ul>
   </section>
 
   <section class="card center narrow">
@@ -66,7 +71,7 @@
 <script>
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // ------- Custom Player (Listen page) -------
+  // ------- Full Player (Listen page) -------
   const pa = document.getElementById('pageAudio');
   const pbtn = document.getElementById('pagePlay');
   const pbar = document.getElementById('pageBar');
@@ -104,25 +109,104 @@
     if (e.key==='ArrowLeft')  { pa.currentTime -= 5; e.preventDefault(); }
   });
 
-  // ------- Now Playing -------
+  // ------- Now Playing + History (same logic as home) -------
+  const CURRENT_URL = 'https://public.radio.co/api/v2/se50df870e/track/current';
+  const HISTORY_URL = 'https://public.radio.co/api/v2/se50df870e/track/history';
+
+  function isAd(item){
+    return !!(
+      item?.is_commercial === true ||
+      /(^|\b)(ad|advert|advertisement|commercial|psa|sweeper|station id|promo)(\b|:)/i.test(item?.title || '') ||
+      /(^|\b)(ad|advert|commercial|psa|sweeper|station id|promo)(\b|:)/i.test(item?.artist || '') ||
+      (!(item?.title) && !(item?.artist))
+    );
+  }
+  function formatNP(item){
+    const title = item?.title || '';
+    const artist = item?.artist || '';
+    const art = item?.artwork || '';
+    const ad = isAd(item);
+    if (ad) {
+      const label = `<strong class="ad-pill">AD</strong>`;
+      return `${art ? `<img src="${art}" alt="" />` : ''}${label} ${title || 'Advertisement'}`;
+    }
+    return `${art ? `<img src="${art}" alt="" />` : ''}${artist ? `<strong>${artist}</strong> — ` : ''}${title}`;
+  }
+  function relTime(iso){
+    const d = iso ? new Date(iso) : null;
+    if(!d || isNaN(d)) return '';
+    const diff = (Date.now() - d.getTime())/1000;
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff/60)+'m ago';
+    if (diff < 86400) return Math.floor(diff/3600)+'h ago';
+    return d.toLocaleString();
+  }
   async function fetchNowPlaying(elId){
     try{
-      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
+      const res = await fetch(CURRENT_URL, {cache:'no-store'});
       if(!res.ok) throw new Error('HTTP '+res.status);
       const data = await res.json();
-      const t = data?.data;
-      const title = t?.title || '';
-      const artist = t?.artist || '';
-      const art = t?.artwork || '';
+      const t = data?.data || {};
       const el = document.getElementById(elId);
       if(!el) return;
-      el.innerHTML = (title || artist)
-        ? `${art ? `<img src="${art}" alt="" />` : ''}${artist ? artist+' — ' : ''}${title}`
-        : '';
+      el.innerHTML = formatNP(t);
     }catch(e){}
   }
+
+  async function renderHistorySongs(elId, songLimit){
+    const list = document.getElementById(elId);
+    if(!list) return;
+    try{
+      const res = await fetch(HISTORY_URL, {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const json = await res.json();
+      const raw = Array.isArray(json?.data) ? json.data : [];
+
+      let out = [];
+      let collectedSongs = 0;
+      let adRun = 0;
+
+      for (const item of raw) {
+        const ad = isAd(item);
+        if (ad) { adRun += 1; continue; }
+        if (adRun > 0) {
+          out.push({type:'adbreak', count: adRun});
+          adRun = 0;
+        }
+        out.push({type:'song', item});
+        collectedSongs += 1;
+        if (collectedSongs >= songLimit) break;
+      }
+      if (adRun > 0 && collectedSongs>0) out.push({type:'adbreak', count: adRun});
+
+      list.innerHTML = out.map(entry=>{
+        if (entry.type === 'adbreak') {
+          const n = entry.count;
+          return `<li class="history-row adbreak"><div class="adline">Ad Break (${n} ad${n>1?'s':''})</div></li>`;
+        } else {
+          const it = entry.item;
+          const art = it?.artwork || '';
+          const title = it?.title || '';
+          const artist = it?.artist || '';
+          const when = relTime(it?.played_at || it?.start_time);
+          return `<li class="history-row">
+            ${art ? `<img src="${art}" alt="" />` : `<div class="art ph"></div>`}
+            <div class="meta">
+              <div class="t">${artist ? `<strong>${artist}</strong> — ` : ''}${title}</div>
+              <div class="s">${when}</div>
+            </div>
+          </li>`;
+        }
+      }).join('');
+    }catch(e){
+      list.innerHTML = '<li class="history-empty">No recent tracks available.</li>';
+    }
+  }
+
   fetchNowPlaying('np-page');
+  renderHistorySongs('history10', 10);
   setInterval(()=>fetchNowPlaying('np-page'), 20000);
+  setInterval(()=>renderHistorySongs('history10', 10), 60000);
 </script>
 </body>
 </html>

@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#4B0082" />
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
-  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=12" />
-  <link rel="stylesheet" href="styles.css?v=12" />
+  <meta property="og:image" content="assets/og-kbbg-1200x630.jpg?v=20" />
+  <link rel="stylesheet" href="styles.css?v=20" />
 </head>
 <body>
 <header class="site-header">
@@ -32,36 +32,33 @@
     </div>
   </section>
 
-  <!-- Custom Player -->
+  <!-- Minimal Live Player -->
   <section class="card center narrow" aria-label="KBBG 88.1 Live Player">
-    <h2 class="section-title">On Air</h2>
-
     <!-- Hidden native audio -->
     <audio id="homeAudio" preload="metadata">
       <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg" />
       <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl" />
     </audio>
 
-    <!-- Custom controls -->
-    <div class="player">
-      <button id="homePlay" class="btn btn-gold player-btn" aria-label="Play/Pause">▶</button>
-      <div class="progress" id="homeBar" role="progressbar" aria-label="Playback position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-        <div class="progress-fill" id="homeFill"></div>
+    <div class="mini-player">
+      <button id="homePlay" class="round-play" aria-label="Play/Pause">▶</button>
+      <div class="eq" id="homeEq" aria-hidden="true">
+        <span></span><span></span><span></span>
       </div>
-      <span class="time" id="homeTime">00:00</span>
+      <div class="np-wrap">
+        <div class="np-label">Now Playing</div>
+        <div id="np-home" class="now-playing" aria-live="polite"></div>
+      </div>
     </div>
 
-    <div id="np-home" class="now-playing" aria-live="polite"></div>
-    <p class="note">Tip: browsers block autoplay—tap Play to start.</p>
+    <!-- Last 5 Songs (collapsed by default) -->
+    <details class="history-details">
+      <summary class="history-summary">Last 5 Songs</summary>
+      <ul id="history5" class="history-list"></ul>
+    </details>
   </section>
 
-  <!-- Last 10 songs -->
-  <section class="card center narrow">
-    <h2 class="section-title">Last 10 Songs</h2>
-    <ul id="history" class="history-list" aria-live="polite"></ul>
-  </section>
-
-  <!-- Minimal app links -->
+  <!-- Apps -->
   <section class="card center narrow">
     <h2 class="section-title">Get the App</h2>
     <div class="store-row">
@@ -78,68 +75,54 @@
 </footer>
 
 <script>
-  // Year
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // ------- Custom Player (Home) -------
+  // -------- Minimal Live Player (Home) --------
   const ha = document.getElementById('homeAudio');
   const playBtn = document.getElementById('homePlay');
-  const bar = document.getElementById('homeBar');
-  const fill = document.getElementById('homeFill');
-  const timeEl = document.getElementById('homeTime');
-
-  function fmt(t){if(!isFinite(t)) return "00:00"; const m=Math.floor(t/60), s=Math.floor(t%60); return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+  const eq = document.getElementById('homeEq');
 
   playBtn.addEventListener('click', async () => {
     try{
-      if (ha.paused) { await ha.play(); playBtn.textContent='⏸'; }
-      else { ha.pause(); playBtn.textContent='▶'; }
+      if (ha.paused) {
+        await ha.play();
+        playBtn.textContent = '⏸';
+        eq.classList.add('is-playing');
+      } else {
+        ha.pause();
+        playBtn.textContent = '▶';
+        eq.classList.remove('is-playing');
+      }
     }catch(e){}
   });
+  ha.addEventListener('ended', ()=>{ playBtn.textContent='▶'; eq.classList.remove('is-playing'); });
 
-  function updateUI(){
-    const dur = ha.duration || 0, cur = ha.currentTime || 0;
-    const pct = dur ? (cur/dur)*100 : 0;
-    fill.style.width = pct + '%';
-    bar.setAttribute('aria-valuenow', Math.round(pct));
-    timeEl.textContent = fmt(cur);
+  // -------- Now Playing + History Utilities --------
+  const CURRENT_URL = 'https://public.radio.co/api/v2/se50df870e/track/current';
+  const HISTORY_URL = 'https://public.radio.co/api/v2/se50df870e/track/history';
+
+  function isAd(item){
+    const t = (item?.title || '').toLowerCase();
+    const a = (item?.artist || '').toLowerCase();
+    // Heuristics for ad/commercial/PSA/sweeper/station IDs
+    return !!(
+      item?.is_commercial === true ||
+      /(^|\b)(ad|advert|advertisement|commercial|psa|sweeper|station id|promo)(\b|:)/i.test(item?.title || '') ||
+      /(^|\b)(ad|advert|commercial|psa|sweeper|station id|promo)(\b|:)/i.test(item?.artist || '') ||
+      (!t && !a) // sometimes ads have empty artist/title
+    );
   }
-  ha.addEventListener('timeupdate', updateUI);
-  ha.addEventListener('loadedmetadata', updateUI);
-  ha.addEventListener('ended', ()=>{ playBtn.textContent='▶'; });
-
-  // Seek by click/drag
-  function seekFromClientX(clientX){
-    const rect = bar.getBoundingClientRect();
-    const ratio = Math.min(Math.max((clientX - rect.left)/rect.width, 0), 1);
-    if (isFinite(ha.duration)) ha.currentTime = ratio * ha.duration;
+  function formatNP(item){
+    const title = item?.title || '';
+    const artist = item?.artist || '';
+    const art = item?.artwork || '';
+    const ad = isAd(item);
+    if (ad) {
+      const label = `<strong class="ad-pill">AD</strong>`;
+      return `${art ? `<img src="${art}" alt="" />` : ''}${label} ${title || 'Advertisement'}`;
+    }
+    return `${art ? `<img src="${art}" alt="" />` : ''}${artist ? `<strong>${artist}</strong> — ` : ''}${title}`;
   }
-  bar.addEventListener('click', (e)=>seekFromClientX(e.clientX));
-  bar.addEventListener('keydown', (e)=>{
-    if (e.key==='ArrowRight') { ha.currentTime += 5; e.preventDefault(); }
-    if (e.key==='ArrowLeft')  { ha.currentTime -= 5; e.preventDefault(); }
-  });
-
-  // ------- Now Playing + History (Radio.co Public API) -------
-  // current: https://public.radio.co/api/v2/se50df870e/track/current
-  // history: https://public.radio.co/api/v2/se50df870e/track/history
-  async function fetchNowPlaying(elId){
-    try{
-      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/current', {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      const data = await res.json();
-      const t = data?.data;
-      const title = t?.title || '';
-      const artist = t?.artist || '';
-      const art = t?.artwork || '';
-      const el = document.getElementById(elId);
-      if(!el) return;
-      el.innerHTML = (title || artist)
-        ? `${art ? `<img src="${art}" alt="" />` : ''}${artist ? artist+' — ' : ''}${title}`
-        : '';
-    }catch(e){}
-  }
-
   function relTime(iso){
     const d = iso ? new Date(iso) : null;
     if(!d || isNaN(d)) return '';
@@ -150,35 +133,84 @@
     return d.toLocaleString();
   }
 
-  async function fetchHistory(limit=10){
-    const list = document.getElementById('history');
+  async function fetchNowPlaying(elId){
     try{
-      const res = await fetch('https://public.radio.co/api/v2/se50df870e/track/history', {cache:'no-store'});
+      const res = await fetch(CURRENT_URL, {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      const t = data?.data || {};
+      const el = document.getElementById(elId);
+      if(!el) return;
+      el.innerHTML = formatNP(t);
+    }catch(e){}
+  }
+
+  // Build a list of last N songs (exclude ads) and insert ad-break markers
+  async function renderHistorySongs(elId, songLimit){
+    const list = document.getElementById(elId);
+    if(!list) return;
+    try{
+      const res = await fetch(HISTORY_URL, {cache:'no-store'});
       if(!res.ok) throw new Error('HTTP '+res.status);
       const json = await res.json();
-      const arr = Array.isArray(json?.data) ? json.data.slice(0, limit) : [];
-      list.innerHTML = arr.map(item=>{
-        const title = item?.title || '';
-        const artist = item?.artist || '';
-        const art = item?.artwork || '';
-        const when = relTime(item?.played_at || item?.start_time);
-        return `<li class="history-row">
-          ${art ? `<img src="${art}" alt="" />` : `<div class="art ph"></div>`}
-          <div class="meta">
-            <div class="t">${artist ? `<strong>${artist}</strong> — ` : ''}${title}</div>
-            <div class="s">${when}</div>
-          </div>
-        </li>`;
+      const raw = Array.isArray(json?.data) ? json.data : [];
+
+      // Walk through history top → bottom adding:
+      // - song items (non-ads) up to songLimit
+      // - ad break markers, but DO NOT count ads towards the limit
+      let out = [];
+      let collectedSongs = 0;
+      let adRun = 0;
+
+      for (const item of raw) {
+        const ad = isAd(item);
+        if (ad) {
+          adRun += 1;
+          continue;
+        }
+        // we hit a song; if there was an ad run before it, add marker
+        if (adRun > 0) {
+          out.push({type:'adbreak', count: adRun});
+          adRun = 0;
+        }
+        out.push({type:'song', item});
+        collectedSongs += 1;
+        if (collectedSongs >= songLimit) break;
+      }
+      // if history ends with an ad run (rare), append marker at the end
+      if (adRun > 0 && collectedSongs>0) {
+        out.push({type:'adbreak', count: adRun});
+      }
+
+      list.innerHTML = out.map(entry=>{
+        if (entry.type === 'adbreak') {
+          const n = entry.count;
+          return `<li class="history-row adbreak"><div class="adline">Ad Break (${n} ad${n>1?'s':''})</div></li>`;
+        } else {
+          const it = entry.item;
+          const art = it?.artwork || '';
+          const title = it?.title || '';
+          const artist = it?.artist || '';
+          const when = relTime(it?.played_at || it?.start_time);
+          return `<li class="history-row">
+            ${art ? `<img src="${art}" alt="" />` : `<div class="art ph"></div>`}
+            <div class="meta">
+              <div class="t">${artist ? `<strong>${artist}</strong> — ` : ''}${title}</div>
+              <div class="s">${when}</div>
+            </div>
+          </li>`;
+        }
       }).join('');
     }catch(e){
-      list.innerHTML = '<li class="history-empty">No history available right now.</li>';
+      list.innerHTML = '<li class="history-empty">No recent tracks available.</li>';
     }
   }
 
+  // Init
   fetchNowPlaying('np-home');
-  fetchHistory(10);
+  renderHistorySongs('history5', 5);
   setInterval(()=>fetchNowPlaying('np-home'), 20000);
-  setInterval(()=>fetchHistory(10), 60000);
+  setInterval(()=>renderHistorySongs('history5', 5), 60000);
 </script>
 </body>
 </html>
