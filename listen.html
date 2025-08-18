@@ -9,7 +9,7 @@
   <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
   <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
   <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
-  <link rel="stylesheet" href="styles.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=14" />
 </head>
 <body class="theme-gradient">
 <header class="site-header">
@@ -24,7 +24,6 @@
   <section class="player-card player-card--center" aria-label="KBBG Live Player">
     <div class="player-left">
       <div class="artwrap" id="artwrap-live" aria-hidden="true">
-        <!-- Keep your existing fallback art -->
         <img id="art-live" src="/kbbg/KBBGFM88One400x400.png" alt="" />
       </div>
     </div>
@@ -35,6 +34,7 @@
       <div class="controls">
         <button id="play-live" class="control-btn" aria-label="Play/Pause"></button>
 
+        <!-- Volume (matches Home) -->
         <div class="volume">
           <button id="mute-live" class="vol-btn" aria-label="Mute/Unmute" aria-pressed="false">
             <svg viewBox="0 0 24 24" class="vol-ic" aria-hidden="true">
@@ -57,7 +57,7 @@
         <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
       </audio>
 
-      <!-- Simple text list of last 5 songs (no thumbnails) -->
+      <!-- Last 5 Songs (text list, ads excluded) -->
       <section class="recent" aria-label="Last 5 Songs">
         <h2 class="sr-only">Last 5 Songs</h2>
         <ol id="recent-list-live" class="recent-list" aria-live="polite" aria-busy="true"></ol>
@@ -75,7 +75,7 @@
 </main>
 
 <footer class="site-footer">
-  <p>© <span id="y"></span> KBBG FM 88.1</p>
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="sitemap.html">Sitemap</a></p>
 </footer>
 
 <script>
@@ -89,7 +89,7 @@
   const eqBars    = document.getElementById('eq-live');
   const recentList = document.getElementById('recent-list-live');
 
-  // volume
+  // Volume (shared with Home)
   const volSlider = document.getElementById('vol-live');
   const muteBtn   = document.getElementById('mute-live');
   const VOL_KEY   = 'kbbg-vol';
@@ -180,7 +180,6 @@
       npT.textContent = 'Now Playing';
       npTr.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
 
-      // History list
       const items = Array.isArray(j?.history) ? j.history : [];
       const songs = [];
       for(const it of items){

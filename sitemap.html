@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KBBG FM 88.1 — Sitemap</title>
+  <meta name="theme-color" content="#3b0b7a" />
+  <link rel="stylesheet" href="styles.css?v=16" />
+  <style>
+    .sm-wrap{max-width:980px;margin:40px auto;padding:0 16px}
+    .sm-wrap h1{margin:0 0 12px}
+    .sm-list{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+    .sm-list a{color:#fff;text-decoration:none;border:1px solid var(--surface-2);
+      border-radius:10px;padding:10px 12px;display:block;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02))}
+    .sm-list a:hover{background:rgba(255,255,255,.06)}
+    .sm-note{color:var(--muted);margin-top:12px}
+  </style>
+</head>
+<body class="theme-gradient">
+  <header class="site-header">
+    <a class="logo" href="./">KBBG 88.1</a>
+    <nav class="nav">
+      <a href="./">Home</a>
+      <a href="listen.html">Listen Live</a>
+      <a class="btn btn-gold" href="kbbhub.html">KBB Hub</a>
+    </nav>
+  </header>
+
+  <main class="sm-wrap">
+    <h1>Sitemap</h1>
+    <ul class="sm-list">
+      <li><a href="./">Home</a></li>
+      <li><a href="listen.html">Listen Live</a></li>
+      <li><a href="kbbhub.html">KBB Hub</a></li>
+      <li><a href="sitemap.xml">Sitemap (XML)</a></li>
+    </ul>
+
+    <p class="sm-note">This site is a lightweight static site for KBBG FM 88.1 on GitHub Pages.</p>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="y"></span> KBBG FM 88.1 · <a href="sitemap.html">Sitemap</a></p>
+  </footer>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
