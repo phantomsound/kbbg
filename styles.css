@@ -160,3 +160,43 @@ h1,h2{line-height:1.15;margin:0 0 .6rem}
 @media (max-width:520px){
   .hero{min-height:46vh}
 }
+.listen-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(160deg, #4B0082, #000);
+  min-height: calc(100vh - 140px); /* account for header+footer */
+  text-align: center;
+  color: #fff;
+}
+
+.player-box {
+  background: rgba(255,255,255,0.05);
+  padding: 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  max-width: 500px;
+  margin: auto;
+}
+
+.now-playing {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+}
+
+.now-playing img.np-art {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: .5rem;
+}
+
+audio {
+  width: 100%;
+  margin: 1rem 0;
+}

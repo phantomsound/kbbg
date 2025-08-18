@@ -48,3 +48,14 @@ All notable changes to this project will be documented here.
 - Header, nav, footer structure.
 - Base theme (purple, gold, black).
 - Assets folder + OG/hero images.
+
+### 2025-08-17
+- **Listen Page Simplification**
+  - Removed recent tracks list — page now serves purely as the standalone player.
+  - Centered player within a modern card layout against a purple → black gradient.
+  - Enhanced **Now Playing** section with album artwork, artist, and track title.
+  - Maintained consistent navigation + footer elements for seamless user flow.
+
+- **CSS Updates**
+  - Added `.listen-main`, `.player-box`, and `.now-playing` classes.
+  - Improved responsiveness and modernized the overall visual look.
