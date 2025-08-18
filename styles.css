@@ -69,7 +69,9 @@ body.theme-gradient{
 .np-title{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .np-track{font-size:18px;margin:4px 0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.controls{display:flex;align-items:center;gap:12px}
+.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* Play/Pause */
 .control-btn{
   width:56px;height:56px;border-radius:50%;
   border:1px solid var(--gold);
@@ -87,6 +89,55 @@ body.theme-gradient{
 .control-btn.is-playing::before{display:none}
 .control-btn.is-playing::after{ /* pause icon */
   width:18px;height:18px; border-left:4px solid #fff; border-right:4px solid #fff; left:19px; top:19px;
+}
+
+/* Volume control */
+.volume{
+  display:flex; align-items:center; gap:10px;
+  padding:4px 8px; border:1px solid var(--surface-2);
+  border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+}
+.vol-btn{
+  display:inline-grid; place-items:center;
+  width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--surface-2);
+  background:transparent; color:#fff; cursor:pointer;
+  transition:transform .1s ease, background .2s;
+}
+.vol-btn:hover{ transform: translateY(-1px); background:var(--surface); }
+.vol-btn.is-muted .vol-waves{ opacity:.2; }
+.vol-ic{ width:18px; height:18px; fill:#fff; color:#fff; }
+
+/* Slider track */
+.vol-slider{
+  -webkit-appearance:none; appearance:none;
+  width:140px; height:6px; border-radius:999px; outline:none;
+  background: linear-gradient(90deg, var(--gold), rgba(244,197,66,.35));
+  box-shadow: inset 0 0 0 1px var(--surface-2);
+}
+.vol-slider:focus-visible{ outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* WebKit thumb */
+.vol-slider::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:16px; height:16px; border-radius:50%;
+  background:#fff; border:2px solid var(--gold);
+  box-shadow:0 0 0 3px rgba(244,197,66,.15);
+  cursor:pointer;
+}
+/* Firefox thumb */
+.vol-slider::-moz-range-thumb{
+  width:16px; height:16px; border-radius:50%;
+  background:#fff; border:2px solid var(--gold);
+  box-shadow:0 0 0 3px rgba(244,197,66,.15);
+  cursor:pointer;
+}
+/* Firefox track */
+.vol-slider::-moz-range-track{
+  height:6px; border-radius:999px;
+  background: linear-gradient(90deg, var(--gold), rgba(244,197,66,.35));
+  box-shadow: inset 0 0 0 1px var(--surface-2);
 }
 
 .tiny-note{font-size:12px;color:var(--muted);margin-top:8px}
@@ -132,6 +183,7 @@ body.theme-gradient{
   .control-btn{width:52px;height:52px}
   .control-btn::before{left:19px; top:16px}
   .control-btn.is-playing::after{left:17px; top:17px}
+  .vol-slider{ width:110px; }
 }
 
 /* ========== EQ Animation ========== */
@@ -154,4 +206,11 @@ body.theme-gradient{
 @keyframes eq-bounce {
   0%, 100% { height: 4px; }
   50% { height: 20px; }
+}
+
+/* A11y utility (optional) */
+.sr-only{
+  position:absolute!important; width:1px; height:1px;
+  padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0);
+  white-space:nowrap; border:0;
 }

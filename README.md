@@ -4,12 +4,13 @@ Simple, fast site for KBBG FM 88.1 hosted on GitHub Pages.
 
 ## Pages
 - **Home (`index.html`)**
-  - Unified modern player (play/pause, “Now Playing”, artwork).
+  - Unified modern player (play/pause, volume, “Now Playing”, artwork, EQ).
   - **“Last 5 Songs”** collapsible section (ads excluded). Loads on page open and refreshes periodically.
   - Store badges (Google Play / App Store).
 
 - **Listen (`listen.html`)**
   - **Player-only** page using the same unified style as the homepage player.
+  - Volume control, “Now Playing”, and a text list of the **Last 5 Songs** (ads excluded).
   - Store badges displayed beneath the player.
 
 ## Streaming
@@ -18,12 +19,12 @@ Simple, fast site for KBBG FM 88.1 hosted on GitHub Pages.
 
 ## Now Playing & Recent
 - **Status (current + history):** `https://public.radio.co/stations/se50df870e/status`  
-  - We use this endpoint to populate “Now Playing” and **Last 5 Songs** (server history).  
-  - Ads are filtered out (by keywords like “ad”, “advert”, “promo”, “sweeper”, “station id”, “psa”).
+  - Used to populate “Now Playing” and **Last 5 Songs** (server history).  
+  - Ads filtered by keywords (“ad”, “advert”, “promo”, “sweeper”, “station id”, “psa”).
 
 ## Assets
 - Social preview: `/kbbg/assets/og-kbbg-1200x630.jpg`
-- Default artwork fallback (repo root): `/kbbg/KBBGFM88One400x400.png`
+- Default artwork fallback: `/kbbg/KBBGFM88One400x400.png`
 
 ## Local Dev
 Open `index.html` in a browser, or use a tiny static server:

@@ -6,11 +6,10 @@
 # Changelog
 
 ## 2025-08-17 (late)
-- Switch “Now Playing” and “Last 5 Songs” to **Radio.co status endpoint**:
-  `https://public.radio.co/stations/se50df870e/status` (uses server history, not user playback).
-- Harden ad filtering (handles “ad break”, “station id”, etc.).
-- Standardize fallback artwork path on pages to `/kbbg/KBBGFM88One400x400.png`.
-- Add EQ animation CSS and wire it to play/pause state.
+- “Last 5 Songs” powered by **Radio.co status** (`/stations/se50df870e/status`) to use server-side history (not user playback).
+- Added sleek **volume control** (mute toggle + gold slider) to Home and Listen.
+- Kept existing fallback artwork (`/kbbg/KBBGFM88One400x400.png`)—no extra station logo.
+- Refreshed styles, wired EQ visibility to play/pause, and hardened ad filtering.
 
 ## 2025-08-17
 - Unified modern player style across Home and Listen.
