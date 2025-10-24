@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KBBG Hub — Stories, Music & Community</title>
+  <meta name="description" content="The KBBG Hub: featured stories, shows, and community updates—plus the live player—on one page." />
+  <meta name="theme-color" content="#3b0b7a" />
+
+  <!-- Social -->
+  <meta property="og:title" content="KBBG Hub — Stories, Music & Community" />
+  <meta property="og:description" content="Featured stories, music, and community updates from KBBG FM 88.1." />
+  <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
+
+  <link rel="stylesheet" href="styles.css?v=18" />
+</head>
+<body class="theme-gradient">
+<header class="site-header">
+  <a class="logo" href="./">KBBG 88.1</a>
+  <nav class="nav">
+    <a href="./">Home</a>
+    <a href="listen.html">Listen Live</a>
+    <a class="btn btn-gold" href="kbbhub.html" aria-current="page">KBB Hub</a>
+  </nav>
+</header>
+
+<main>
+  <!-- Intro -->
+  <section class="hero hero--compact">
+    <div class="hero-inner">
+      <h1>KBBG Hub</h1>
+      <p>Featured stories, music, and community from KBBG FM 88.1.</p>
+    </div>
+  </section>
+
+  <!-- Player ABOVE socials -->
+  <section class="player-card hub-player" aria-label="KBBG Live Player">
+    <div class="player-left">
+      <div class="artwrap" id="artwrap-hub" aria-hidden="true">
+        <img id="art-hub" src="/kbbg/KBBGFM88One400x400.png" alt="" />
+      </div>
+    </div>
+    <div class="player-right">
+      <div class="np-title" id="np-title-hub">Now Playing</div>
+      <div class="np-track" id="np-track-hub">Tap play to start the stream</div>
+
+      <div class="controls">
+        <button id="play-hub" class="control-btn" aria-label="Play/Pause"></button>
+
+        <div class="volume">
+          <button id="mute-hub" class="vol-btn" aria-label="Mute/Unmute" aria-pressed="false">
+            <svg viewBox="0 0 24 24" class="vol-ic" aria-hidden="true">
+              <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
+              <path class="vol-waves" d="M14.5 8.5c1 .9 1.5 2 1.5 3.5s-.5 2.6-1.5 3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </button>
+          <input id="vol-hub" class="vol-slider" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+        </div>
+
+        <div class="eq-bars" id="eq-hub" hidden>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
+      </div>
+
+      <audio id="hubPlayer" preload="none">
+        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+      </audio>
+      <p class="tiny-note">Tap Play to start the live stream.</p>
+    </div>
+  </section>
+
+  <!-- Socials strip (Hub-only) -->
+  <section class="hub-socials" aria-label="Follow KBBG">
+    <div class="hub-socials-inner">
+      <a class="hub-social hub-social--ig" href="https://www.instagram.com/kbbgfm" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+      <a class="hub-social hub-social--fb" href="https://www.facebook.com/KBBGFM88.1/" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+      <a class="hub-social hub-social--x"  href="https://x.com/kbbg88" target="_blank" rel="noopener" aria-label="X / Twitter">𝕏</a>
+    </div>
+  </section>
+
+  <!-- Hub layout: main grid + right sidebar timeline -->
+  <section class="hub-layout">
+    <!-- Main content -->
+    <div class="hub-main">
+      <nav class="hub-categories" aria-label="Content Categories">
+        <button class="hub-cat is-active" data-cat="recommended">Recommended</button>
+        <button class="hub-cat" data-cat="music">Music</button>
+        <button class="hub-cat" data-cat="community">Community</button>
+        <button class="hub-cat" data-cat="talk">Talk & Interviews</button>
+      </nav>
+
+      <section class="hub-grid" id="hub-grid" aria-live="polite">
+        <a class="hub-card" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">
+          <span class="hub-tag">Recommended</span>
+          <h3 class="hub-card-title">KBBG Oral History (UNI)</h3>
+          <p class="hub-card-blurb">Explore the African American Voices Museum collection on KBBG.</p>
+        </a>
+
+        <a class="hub-card" href="https://aa-voices-museum.uni.edu/video_kbbg" target="_blank" rel="noopener">
+          <span class="hub-tag">Community</span>
+          <h3 class="hub-card-title">KBBG Video Archive</h3>
+          <p class="hub-card-blurb">Historic clips and moments from the station’s past.</p>
+        </a>
+
+        <a class="hub-card" href="https://www.youtube.com/watch?v=RmOxb-edD2s&t=1s&ab_channel=UNITV4IBNA" target="_blank" rel="noopener">
+          <span class="hub-tag">Talk</span>
+          <h3 class="hub-card-title">Inside KBBG — UNI TV Feature</h3>
+          <p class="hub-card-blurb">A look at the mission and people behind 88.1.</p>
+        </a>
+
+        <a class="hub-card" href="https://www.youtube.com/@KBBGOfficial" target="_blank" rel="noopener">
+          <span class="hub-tag">Music</span>
+          <h3 class="hub-card-title">KBBG Official YouTube</h3>
+          <p class="hub-card-blurb">Latest videos, promos, and community highlights.</p>
+        </a>
+
+        <a class="hub-card" href="https://www.kcrg.com/content/news/Waterloo-radio-station-founded-to-serve-black-listeners-says-it-needs-help-558597421.html" target="_blank" rel="noopener">
+          <span class="hub-tag">Community</span>
+          <h3 class="hub-card-title">KCRG: A Station for Listeners</h3>
+          <p class="hub-card-blurb">Local coverage on KBBG’s legacy and support needs.</p>
+        </a>
+
+        <a class="hub-card" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">
+          <span class="hub-tag">Featured</span>
+          <h3 class="hub-card-title">40 Years of KBBG</h3>
+          <p class="hub-card-blurb">A milestone celebration and look back at service.</p>
+        </a>
+
+        <a class="hub-card" href="https://www.kwwl.com/news/waterloo-radio-station-to-start-playing-music-from-bosnia/article_4491b940-4806-528f-b4ec-81cf65137883.html" target="_blank" rel="noopener">
+          <span class="hub-tag">Music</span>
+          <h3 class="hub-card-title">KWWL: A Global Sound in Waterloo</h3>
+          <p class="hub-card-blurb">Story on KBBG adding Bosnian music for neighbors.</p>
+        </a>
+
+        <a class="hub-card" href="https://scholarworks.uni.edu/cgi/viewcontent.cgi?article=4358&context=grp" target="_blank" rel="noopener">
+          <span class="hub-tag">Talk</span>
+          <h3 class="hub-card-title">UNI ScholarWorks: KBBG Paper (PDF)</h3>
+          <p class="hub-card-blurb">Academic perspective on KBBG’s role and impact.</p>
+        </a>
+
+        <a class="hub-card" href="kbbg-history.html">
+          <span class="hub-tag">Recommended</span>
+          <h3 class="hub-card-title">KBBG History Timeline (Coming Soon)</h3>
+          <p class="hub-card-blurb">We’re assembling a visual timeline of 88.1’s journey.</p>
+        </a>
+      </section>
+    </div>
+
+    <!-- Right Sidebar: KBBG History Timeline -->
+    <aside class="hub-aside" aria-labelledby="hub-timeline-h">
+      <h2 id="hub-timeline-h" class="hub-aside-title">KBBG History Timeline</h2>
+      <ol class="timeline-list">
+        <li class="tl-item">
+          <div class="tl-date">Mar 1977</div>
+          <div class="tl-content">
+            <div class="tl-title">Foundation of ACB, Inc. (KBBG)</div>
+            <p>Jimmie Porter forms Afro-American Community Broadcasting, Inc. to build a station for the Black community.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">Jul 26, 1978</div>
+          <div class="tl-content">
+            <div class="tl-title">First Equipment Test (10 watts)</div>
+            <p>KBBG-FM 88.1 conducts its first on-air equipment test at 10 watts.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">Dec 27, 1980</div>
+          <div class="tl-content">
+            <div class="tl-title">Power Upgrade (~10,000 watts)</div>
+            <p>Signal power increases to roughly 10 kW, vastly expanding coverage.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/kbbg" target="_blank" rel="noopener">Source (UNI)</a>
+            <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Context (Spark News)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2007</div>
+          <div class="tl-content">
+            <div class="tl-title">Jimmie Porter’s Legacy</div>
+            <p>Jimmie Porter, founder and longtime leader of KBBG, passes away.</p>
+            <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Source (Spark News)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2012</div>
+          <div class="tl-content">
+            <div class="tl-title">UNI TV Feature</div>
+            <p>Electronic Media Production feature on KBBG highlights the station’s mission.</p>
+            <a class="tl-src" href="https://aa-voices-museum.uni.edu/video_kbbg" target="_blank" rel="noopener">Source (UNI video)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2018</div>
+          <div class="tl-content">
+            <div class="tl-title">40 Years of Service</div>
+            <p>Coverage celebrating KBBG’s four decades of community broadcasting.</p>
+            <a class="tl-src" href="https://acrnewsfeed.blogspot.com/2018/02/all-about-iowa-kbbg-celebrates-40-years.html" target="_blank" rel="noopener">Source (Spark News)</a>
+          </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-date">2019</div>
+          <div class="tl-content">
+            <div class="tl-title">Community Fundraising Push</div>
+            <p>Local report details efforts to support operations and equipment repairs.</p>
+            <a class="tl-src" href="https://www.kcrg.com/content/news/Waterloo-radio-station-founded-to-serve-black-listeners-says-it-needs-help-558597421.html" target="_blank" rel="noopener">Source (KCRG)</a>
+          </div>
+        </li>
+      </ol>
+    </aside>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="listen.html">Listen Live</a> · <a href="sitemap.html">Sitemap</a></p>
+</footer>
+
+<script>
+  const STATUS_URL = 'https://public.radio.co/stations/se50df870e/status';
+
+  const hubAudio = document.getElementById('hubPlayer');
+  const playBtn  = document.getElementById('play-hub');
+  const npT      = document.getElementById('np-title-hub');
+  const npTr     = document.getElementById('np-track-hub');
+  const artImg   = document.getElementById('art-hub');
+  const eqBars   = document.getElementById('eq-hub');
+
+  // volume
+  const volSlider = document.getElementById('vol-hub');
+  const muteBtn   = document.getElementById('mute-hub');
+  const VOL_KEY   = 'kbbg-vol';
+
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  function setBtnPlaying(isPlaying){
+    playBtn.classList.toggle('is-playing', !!isPlaying);
+    playBtn.setAttribute('aria-pressed', !!isPlaying);
+    eqBars.hidden = !isPlaying;
+  }
+
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if(hubAudio.paused){
+        await hubAudio.play();
+        setBtnPlaying(true);
+      }else{
+        hubAudio.pause();
+        setBtnPlaying(false);
+      }
+    }catch(e){ console.warn(e); }
+  });
+  hubAudio.addEventListener('pause', ()=>setBtnPlaying(false));
+  hubAudio.addEventListener('play',  ()=>setBtnPlaying(true));
+
+  function applyVolumeFromStorage(audio, slider, muteButton){
+    let vol = localStorage.getItem(VOL_KEY);
+    if(vol !== null){
+      vol = Math.max(0, Math.min(1, parseFloat(vol)));
+      audio.volume = isNaN(vol) ? 1 : vol;
+      slider.value = isNaN(vol) ? 1 : vol;
+    }else{
+      audio.volume = 1;
+      slider.value = 1;
+    }
+    const isMuted = audio.muted || audio.volume === 0;
+    muteButton.setAttribute('aria-pressed', isMuted);
+    muteButton.classList.toggle('is-muted', isMuted);
+  }
+
+  volSlider.addEventListener('input', (e)=>{
+    const v = Math.max(0, Math.min(1, parseFloat(e.target.value)));
+    hubAudio.volume = isNaN(v) ? 1 : v;
+    hubAudio.muted = v === 0;
+    localStorage.setItem(VOL_KEY, String(v));
+    const isMuted = hubAudio.muted || v === 0;
+    muteBtn.setAttribute('aria-pressed', isMuted);
+    muteBtn.classList.toggle('is-muted', isMuted);
+  });
+
+  muteBtn.addEventListener('click', ()=>{
+    if(hubAudio.muted || hubAudio.volume === 0){
+      hubAudio.muted = false;
+      const newVol = parseFloat(localStorage.getItem(VOL_KEY) ?? '0.6') || 0.6;
+      hubAudio.volume = newVol;
+      volSlider.value = String(newVol);
+    }else{
+      hubAudio.muted = true;
+    }
+    const isMuted = hubAudio.muted;
+    muteBtn.setAttribute('aria-pressed', isMuted);
+    muteBtn.classList.toggle('is-muted', isMuted);
+    if(!isMuted) localStorage.setItem(VOL_KEY, String(hubAudio.volume));
+  });
+
+  async function fetchStatus(){
+    try{
+      const r = await fetch(STATUS_URL, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+
+      const now = j?.current_track || j?.now_playing || j?.current || j;
+      const title  = (now?.title || now?.track?.title || '').trim();
+      const artist = (now?.artist || now?.track?.artist || '').trim();
+      const art    = (now?.artwork_url || now?.artwork || now?.image || '').trim();
+
+      if(art){
+        artImg.src = art;
+        document.getElementById('artwrap-hub').classList.add('has-art');
+      }
+      npT.textContent = 'Now Playing';
+      npTr.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
+    }catch(e){ /* silent */ }
+  }
+
+  applyVolumeFromStorage(hubAudio, volSlider, muteBtn);
+  fetchStatus();
+  setInterval(fetchStatus, 20000);
+
+  // Category chip visual toggle (static content)
+  document.querySelectorAll('.hub-cat').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.hub-cat').forEach(b=>b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+  });
+</script>
+</body>
+</html>
