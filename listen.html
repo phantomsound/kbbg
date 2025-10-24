@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KBBG FM 88.1 — Listen Live</title>
+  <meta name="description" content="Listen live to KBBG FM 88.1. Music, culture, and community-focused talk from Waterloo, Iowa." />
+  <meta name="theme-color" content="#3b0b7a" />
+  <meta property="og:title" content="KBBG FM 88.1 — Listen Live" />
+  <meta property="og:description" content="Music, culture, and community-focused talk from Waterloo, Iowa." />
+  <meta property="og:image" content="/kbbg/assets/og-kbbg-1200x630.jpg" />
+  <link rel="stylesheet" href="styles.css?v=15" />
+</head>
+<body class="theme-gradient">
+<header class="site-header">
+  <a class="logo" href="./">KBBG 88.1</a>
+  <nav class="nav">
+    <a href="./">Home</a>
+    <a class="btn btn-gold" href="listen.html" aria-current="page">Listen Live</a>
+  </nav>
+</header>
+
+<main>
+  <section class="player-card player-card--center" aria-label="KBBG Live Player">
+    <div class="player-left">
+      <div class="artwrap" id="artwrap-live" aria-hidden="true">
+        <img id="art-live" src="/kbbg/KBBGFM88One400x400.png" alt="" />
+      </div>
+    </div>
+    <div class="player-right">
+      <div class="np-title" id="np-title-live">Now Playing</div>
+      <div class="np-track" id="np-track-live">Tap play to start the stream</div>
+
+      <div class="controls">
+        <button id="play-live" class="control-btn" aria-label="Play/Pause"></button>
+
+        <!-- Volume (matches Home) -->
+        <div class="volume">
+          <button id="mute-live" class="vol-btn" aria-label="Mute/Unmute" aria-pressed="false">
+            <svg viewBox="0 0 24 24" class="vol-ic" aria-hidden="true">
+              <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
+              <path class="vol-waves" d="M14.5 8.5c1 .9 1.5 2 1.5 3.5s-.5 2.6-1.5 3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </button>
+          <input id="vol-live" class="vol-slider" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+        </div>
+
+        <div class="eq-bars" id="eq-live" hidden>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div><div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
+      </div>
+
+      <audio id="livePlayer" preload="none">
+        <source src="https://s5.radio.co/se50df870e/listen" type="audio/mpeg">
+        <source src="https://s5.radio.co/se50df870e/listen.m3u8" type="application/vnd.apple.mpegurl">
+      </audio>
+
+      <p class="tiny-note">If audio doesn’t start, tap Play. Network policies may block streams.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© <span id="y"></span> KBBG FM 88.1 · <a href="./">Home</a> · <a href="sitemap.html">Sitemap</a></p>
+  <div class="store-row">
+    <a class="store-badge" target="_blank" rel="noopener"
+       href="https://play.google.com/store/apps/details?id=com.AppInstitute.kbbgfm88">Google Play</a>
+    <a class="store-badge" target="_blank" rel="noopener"
+       href="https://apps.apple.com/us/app/kbbg-fm-88-one-mobile/id6747726588">App Store</a>
+  </div>
+</footer>
+
+
+<script>
+  const STATUS_URL = 'https://public.radio.co/stations/se50df870e/status';
+
+  const liveAudio = document.getElementById('livePlayer');
+  const playBtn   = document.getElementById('play-live');
+  const npT       = document.getElementById('np-title-live');
+  const npTr      = document.getElementById('np-track-live');
+  const artImg    = document.getElementById('art-live');
+  const eqBars    = document.getElementById('eq-live');
+
+  // Volume
+  const volSlider = document.getElementById('vol-live');
+  const muteBtn   = document.getElementById('mute-live');
+  const VOL_KEY   = 'kbbg-vol';
+
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  function setBtnPlaying(isPlaying){
+    playBtn.classList.toggle('is-playing', !!isPlaying);
+    playBtn.setAttribute('aria-pressed', !!isPlaying);
+    eqBars.hidden = !isPlaying;
+  }
+
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if(liveAudio.paused){
+        await liveAudio.play();
+        setBtnPlaying(true);
+      }else{
+        liveAudio.pause();
+        setBtnPlaying(false);
+      }
+    }catch(e){ console.warn(e); }
+  });
+  liveAudio.addEventListener('pause', ()=>setBtnPlaying(false));
+  liveAudio.addEventListener('play',  ()=>setBtnPlaying(true));
+
+  // Volume helpers
+  function applyVolumeFromStorage(audio, slider, muteButton){
+    let vol = localStorage.getItem(VOL_KEY);
+    if(vol !== null){
+      vol = Math.max(0, Math.min(1, parseFloat(vol)));
+      audio.volume = isNaN(vol) ? 1 : vol;
+      slider.value = isNaN(vol) ? 1 : vol;
+    }else{
+      audio.volume = 1;
+      slider.value = 1;
+    }
+    const isMuted = audio.muted || audio.volume === 0;
+    muteButton.setAttribute('aria-pressed', isMuted);
+    muteButton.classList.toggle('is-muted', isMuted);
+  }
+
+  volSlider.addEventListener('input', (e)=>{
+    const v = Math.max(0, Math.min(1, parseFloat(e.target.value)));
+    liveAudio.volume = isNaN(v) ? 1 : v;
+    liveAudio.muted = v === 0;
+    localStorage.setItem(VOL_KEY, String(v));
+    const isMuted = liveAudio.muted || v === 0;
+    muteBtn.setAttribute('aria-pressed', isMuted);
+    muteBtn.classList.toggle('is-muted', isMuted);
+  });
+
+  muteBtn.addEventListener('click', ()=>{
+    if(liveAudio.muted || liveAudio.volume === 0){
+      liveAudio.muted = false;
+      const newVol = parseFloat(localStorage.getItem(VOL_KEY) ?? '0.6') || 0.6;
+      liveAudio.volume = newVol;
+      volSlider.value = String(newVol);
+    }else{
+      liveAudio.muted = true;
+    }
+    const isMuted = liveAudio.muted;
+    muteBtn.setAttribute('aria-pressed', isMuted);
+    muteBtn.classList.toggle('is-muted', isMuted);
+    if(!isMuted) localStorage.setItem(VOL_KEY, String(liveAudio.volume));
+  });
+
+  async function fetchStatus(){
+    try{
+      const r = await fetch(STATUS_URL, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+
+      const now = j?.current_track || j?.now_playing || j?.current || j;
+      const title  = (now?.title || now?.track?.title || '').trim();
+      const artist = (now?.artist || now?.track?.artist || '').trim();
+      const art    = (now?.artwork_url || now?.artwork || now?.image || '').trim();
+
+      if(art){
+        artImg.src = art;
+        document.getElementById('artwrap-live').classList.add('has-art');
+      }
+      npT.textContent = 'Now Playing';
+      npTr.textContent = [artist, title].filter(Boolean).join(' — ') || 'Live Stream';
+
+    }catch(e){
+      console.warn(e);
+      npTr.textContent = 'Stream unavailable';
+    }
+  }
+
+  // Init
+  applyVolumeFromStorage(liveAudio, volSlider, muteBtn);
+  fetchStatus();
+  setInterval(fetchStatus, 20000);
+</script>
+</body>
+</html>
